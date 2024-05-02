@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "406112714890",
+    "project_id": "insurrance-ba5dd",
+    "storage_bucket": "insurrance-ba5dd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406112714890:android:ae698bc495a8ad6ad82d73",
+        "android_client_info": {
+          "package_name": "com.example.insurrance"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO78LW5Ppjn0lmGF7W6HTm-kyHYXQrLzE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
