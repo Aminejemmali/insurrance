@@ -8,10 +8,15 @@ class SignUpController with ChangeNotifier {
   TextEditingController signUpLastNameController = TextEditingController();
   TextEditingController signUpEmailController = TextEditingController();
   TextEditingController signUpPasswordController = TextEditingController();
-  TextEditingController signUpConfirmPasswordController =
+  TextEditingController birthDate =
+      TextEditingController();
+  TextEditingController address =
+      TextEditingController();
+  TextEditingController codePostal =
       TextEditingController();
 
-  
+    TextEditingController phoneNumber =
+      TextEditingController();
   void signup() {
     
   }

@@ -1,10 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insurrance/src/api/signup.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/config/app_text_style.dart';
 import 'package:insurrance/src/controllers/signup_controller.dart';
 import 'package:insurrance/src/services/authentication/auth_firebase.dart';
 import 'package:insurrance/src/widgets/auth_form_field.dart';
 import 'package:insurrance/src/widgets/button_widget.dart';
+import 'package:insurrance/views/home/index_home.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +23,11 @@ class _SignupScreenState extends State<SignupScreen> {
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
   bool loading = false;
-
   final GlobalKey<FormState> _signUpFromKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
+    String errorMessage = "";
+    DateTime _pickedDate;
     return Consumer<SignUpController>(
         builder: (context, signUpController, child) {
       return ModalProgressHUD(
@@ -135,41 +139,59 @@ class _SignupScreenState extends State<SignupScreen> {
                         obsecureText: obscurePassword,
                       ),
                       const SizedBox(height: 16),
-                      AuthPasswordFormFieldWidget(
-                        hintText: 'Confirm Password',
+                      AuthTextFormFieldWidget(
+                        hintText: 'BirthDate',
                         prefixIconColor: AppColors.primaryColor,
-                        prefixIcon: "assets/icons/Unlock.png",
+                        prefixIcon: "assets/icons/User.png",
                         errorText: signUpController.passwordValidator,
-                        controller:
-                            signUpController.signUpConfirmPasswordController,
+                        controller: signUpController.birthDate,
                         onChanged: (value) {
-                          signUpController.passwordValidator = null;
                           signUpController.update();
                         },
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Field Required";
-                          } else if (signUpController
-                                  .signUpPasswordController.text !=
-                              signUpController
-                                  .signUpConfirmPasswordController.text) {
-                            return 'Password does\'nt match';
                           }
                           return null;
                         },
-                        suffixIcon: Icon(
-                          obscureConfirmPassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                          size: 20,
-                          color: AppColors.lightGrey,
-                        ),
-                        suffixIconOnTap: () {
-                          setState(() {
-                            obscureConfirmPassword = !obscureConfirmPassword;
-                          });
+                      ),
+                      const SizedBox(height: 16),
+                      AuthTextFormFieldWidget(
+                        controller: signUpController.address,
+                        hintText: "Address",
+                        prefixIconColor: AppColors.primaryColor,
+                        prefixIcon: "assets/icons/User.png",
+                        onChanged: (value) {
+                          signUpController.update();
                         },
-                        obsecureText: obscureConfirmPassword,
+                        validator: (value) {},
+                      ),
+                      const SizedBox(height: 16),
+                      AuthTextFormFieldWidget(
+                        controller: signUpController.codePostal,
+                        hintText: "Code Postal",
+                        prefixIconColor: AppColors.primaryColor,
+                        prefixIcon: "assets/icons/User.png",
+                        onChanged: (value) {
+                          signUpController.update();
+                        },
+                        validator: (value) {},
+                      ),
+                      const SizedBox(height: 16),
+                      AuthTextFormFieldWidget(
+                        controller: signUpController.phoneNumber,
+                        hintText: "Phone number",
+                        prefixIconColor: AppColors.primaryColor,
+                        prefixIcon: "assets/icons/User.png",
+                        onChanged: (value) {
+                          signUpController.update();
+                        },
+                        validator: (value) {},
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        errorMessage,
+                        style: TextStyle(color: Colors.red),
                       ),
                       const SizedBox(height: 16),
                       ButtonWidgetOne(
@@ -186,41 +208,41 @@ class _SignupScreenState extends State<SignupScreen> {
                           setState(() {
                             loading = !loading;
                           });
-                          if (true || _signUpFromKey.currentState!.validate()) {
-                            ///loader
-                            // generalController.changeLoaderCheck(true);
-                            // generalController
-                            //     .updateFormLoaderController(true);
-                            // signUpController.emailValidator = null;
-                            // signUpController.passwordValidator = null;
-                            // signUpController.update();
-                            // generalController.focusOut(context);
+                          if (_signUpFromKey.currentState!.validate()) {
+                            // User data
+
                             await UserAuth().signUpWithEmailAndPassword(
                                 context,
                                 signUpController.signUpEmailController.text,
                                 signUpController.signUpPasswordController.text);
-
-                            // ///post-method
-                            // postMethod(
-                            //     context,
-                            //     signUpWithEmailURL,
-                            //     {
-                            //       'email': signUpController
-                            //           .signUpEmailController.text,
-                            //       'first_name': signUpController
-                            //           .signUpFirstNameController.text,
-                            //       'last_name': signUpController
-                            //           .signUpLastNameController.text,
-                            //       'password': signUpController
-                            //           .signUpPasswordController.text,
-                            //       'password_confirmation':
-                            //           signUpController
-                            //               .signUpConfirmPasswordController
-                            //               .text,
-                            //       'login_as': "customer",
-                            //     },
-                            //     true,
-                            //     signUpWithEmailRepo);
+                            final Map<String, dynamic> userData = {
+                              "id": FirebaseAuth.instance.currentUser!.uid,
+                              "nom": signUpController
+                                  .signUpFirstNameController.text,
+                              "prenom": signUpController
+                                  .signUpLastNameController.text,
+                              "email": FirebaseAuth.instance.currentUser!.email,
+                              "password": signUpController
+                                  .signUpPasswordController.text,
+                              "date_naissance": signUpController.birthDate.text,
+                              "adresse": signUpController.address.text,
+                              "code_postale": signUpController.codePostal.text,
+                              "num_tel": signUpController.phoneNumber.text
+                            };
+                            String dataAdded = await signUpUser(userData);
+                            setState(() {
+                              errorMessage = dataAdded;
+                            });
+                            if (dataAdded == "success") {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(errorMessage)));
+                            }
                           }
                           setState(() {
                             loading = !loading;
@@ -238,38 +260,6 @@ class _SignupScreenState extends State<SignupScreen> {
                             style: AppTextStyles.underlineTextStyle1),
                       ),
                       const SizedBox(height: 18),
-                      Row(
-                        children: const [
-                          Expanded(child: Divider(color: AppColors.grey)),
-                          Expanded(
-                            child: Center(
-                              child: Text(
-                                "Or",
-                                style: AppTextStyles.bodyTextStyle7,
-                              ),
-                            ),
-                          ),
-                          Expanded(child: Divider(color: AppColors.grey)),
-                        ],
-                      ),
-                      SizedBox(height: 18),
-                      // ButtonWidgetThree(
-                      //   buttonIcon: "assets/icons/Google.png",
-                      //   buttonText: "Login Via Google",
-                      //   iconHeight: 25,
-                      //   onTap: () {},
-                      // ),
-                      // SizedBox(height: 14),
-                      // ButtonWidgetThree(
-                      //   buttonIcon: "assets/icons/Facebook.png",
-                      //   buttonText: "Login Via Facebook",
-                      //   iconHeight: 25,
-                      //   onTap: () {
-                      //     // Get.find<SigninController>()
-                      //     //     .signinWithFacebook();
-                      //   },
-                      // ),
-                      // SizedBox(height: 18),
                     ],
                   ),
                 ),

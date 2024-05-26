@@ -1,0 +1,312 @@
+{
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost"
+    }
+  ],
+  "info": {
+    "name": "2024_05_14_000950_laravel_collection.json",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "api/user",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/autos/types",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/autos/types",
+          "host": ["{{base_url}}"],
+          "path": ["api", "autos", "types"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/autos/types/{id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/autos/types/:id",
+          "host": ["{{base_url}}"],
+          "path": ["api", "autos", "types", ":id"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/autos/offres",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/autos/offres",
+          "host": ["{{base_url}}"],
+          "path": ["api", "autos", "offres"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/autos/offres/{id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/autos/offres/:id",
+          "host": ["{{base_url}}"],
+          "path": ["api", "autos", "offres", ":id"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/habitations/types",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/habitations/types",
+          "host": ["{{base_url}}"],
+          "path": ["api", "habitations", "types"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/habitations/types/{id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/habitations/types/:id",
+          "host": ["{{base_url}}"],
+          "path": ["api", "habitations", "types", ":id"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/habitations/offres",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/habitations/offres",
+          "host": ["{{base_url}}"],
+          "path": ["api", "habitations", "offres"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/habitations/offres/{id}",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/habitations/offres/:id",
+          "host": ["{{base_url}}"],
+          "path": ["api", "habitations", "offres", ":id"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/autos/create-devis",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/autos/create-devis",
+          "host": ["{{base_url}}"],
+          "path": ["api", "autos", "create-devis"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    },
+    {
+      "name": "api/habitations/create-devis",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/habitations/create-devis",
+          "host": ["{{base_url}}"],
+          "path": ["api", "habitations", "create-devis"],
+          "variable": []
+        },
+        "description": ""
+      },
+      "response": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": false
+      }
+    }
+  ],
+  "event": []
+}
