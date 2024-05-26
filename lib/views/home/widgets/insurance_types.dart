@@ -28,7 +28,7 @@ class InsurranceTypeWidget extends StatelessWidget {
                   image_url,
                   width: double.infinity,
                   height: 230,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
