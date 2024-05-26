@@ -22,9 +22,9 @@ This is a Flutter-based mobile application for managing various insurance plans.
 ```
 2. **Install dependencies**
     
-    ```bash
+```bash
     flutter pub get
-    ```
+```
 3. **Run the app:**
 
 ```bash
