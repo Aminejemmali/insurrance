@@ -65,7 +65,7 @@ class _SignInScreenState extends State<SignInScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.asset("assets/images/law-hammer.png"),
+                              Image.asset("assets/icons/insurance.png"),
                               const SizedBox(height: 28),
                               const Text(
                                 "Welcome Back",
