@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:insurrance/views/auth/main_auth_scree.dart';
 
 class AuthResult {
   final User? user;
@@ -55,10 +56,10 @@ class UserAuth {
                 // Navigator.of(context).pop();
                 try {
                   await _auth.signOut();
-                  // Navigator.pushReplacement(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => MainAuth()),
-                  // );
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainAuth()),
+                  );
                 } catch (e) {
                   print('Error signing out: $e');
                   _showErrorSnackbar(context, 'Sign out failed: $e');
