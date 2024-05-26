@@ -11,9 +11,9 @@ class OfferListWidget extends StatefulWidget {
   final CarInsurancePlan carInsurancePlan;
 
   const OfferListWidget({
-    super.key,
+    Key? key,
     required this.carInsurancePlan,
-  });
+  }) : super(key: key);
 
   @override
   State<OfferListWidget> createState() => _OfferListWidgetState();
@@ -26,94 +26,130 @@ class _OfferListWidgetState extends State<OfferListWidget> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
-          'Offers',
-          style: TextStyle(color: AppColors.primaryColor),
+          'Select Extra Offers',
+          style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold),
         ),
         backgroundColor: AppColors.white,
         iconTheme: const IconThemeData(color: AppColors.primaryColor),
         elevation: 0,
         actions: [
-          GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CheckoutWidget(
-                      carInsurancePlan: widget.carInsurancePlan,
-                    ),
+          IconButton(
+            icon: const Icon(Icons.arrow_forward),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CheckoutWidget(
+                    carInsurancePlan: widget.carInsurancePlan,
                   ),
-                );
-              },
-              child: Text("Skip"))
+                ),
+              );
+            },
+            tooltip: 'Skip to checkout',
+          ),
         ],
       ),
       body: FutureBuilder<List<Offer>>(
         future: fetchOffers(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text("Error: ${snapshot.error}"));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("No data found"));
+            return const Center(child: Text("No offers available"));
           } else {
             List<Offer> offers = snapshot.data!;
-            return Padding(
+            return ListView.separated(
               padding: const EdgeInsets.all(16.0),
-              child: ListView.builder(
-                itemCount: offers.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
+              itemCount: offers.length + 1, // Add one for the extra offer card
+              itemBuilder: (context, index) {
+                if (index == offers.length) {
+                  // Render the extra offer card
+                  return InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CheckoutWidget(
-                            carInsurancePlan: widget.carInsurancePlan,
-                            offer: offers[index],
-                          ),
-                        ),
+                      // Placeholder action for the extra offer card
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Tapped on extra offer')),
                       );
                     },
                     child: Card(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      margin: const EdgeInsets.symmetric(vertical: 8),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius: BorderRadius.circular(12.0),
                       ),
                       elevation: 4,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              offers[index].name,
-                              style: AppTextStyles.bodyTextStyle1.copyWith(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                        child: Center(
+                          child: Text(
+                            'Get an Extra Offer!',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.blue,
                             ),
-                            SizedBox(height: 10),
-                            Text(
-                              'Price: ${offers[index].price}',
-                              style: AppTextStyles.bodyTextStyle2,
-                            ),
-                            SizedBox(height: 10),
-                            for (var attribute in offers[index].attributes)
-                              Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: Text(
-                                  attribute.title,
-                                  style: AppTextStyles.bodyTextStyle1,
-                                ),
-                              ),
-                          ],
+                          ),
                         ),
                       ),
                     ),
                   );
-                },
-              ),
+                }
+                return InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CheckoutWidget(
+                          carInsurancePlan: widget.carInsurancePlan,
+                          offer: offers[index],
+                        ),
+                      ),
+                    );
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            offers[index].name,
+                            style: AppTextStyles.bodyTextStyle1.copyWith(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          AnimatedDefaultTextStyle(
+                            duration: const Duration(milliseconds: 500),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.red[800], // Bright red for visibility
+                              fontWeight: FontWeight.bold,
+                            ),
+                            child: Text('Price: \$${offers[index].price}'),
+                          ),
+                          const SizedBox(height: 10),
+                          ...offers[index].attributes.map((attribute) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: Text(
+                              "${attribute.title}: ${attribute.description}",
+                              style: AppTextStyles.bodyTextStyle1,
+                            ),
+                          )),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => const Divider(),
             );
           }
         },

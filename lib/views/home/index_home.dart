@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:insurrance/views/home/widgets/appbar.dart';
-
 import 'package:insurrance/views/home/widgets/banner_slider.dart';
 import 'package:insurrance/views/home/widgets/car_insurrance_list.dart';
 import 'package:insurrance/views/home/widgets/insurance_types.dart';
@@ -26,13 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 30),
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 20), // Adjusted padding values
               child: HomeBannerSliderWidget(),
             ),
             SearchFilterWidget(
               onSearchTap: () {},
               controller: TextEditingController(),
             ),
+            SizedBox(height: 20), // Added sized box for better spacing
             InsurranceTypeWidget(
               image_url: 'assets/images/car.png',
               title: "Cars Insurrance",
@@ -43,11 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+            SizedBox(height: 20), // Added sized box for better spacing
             InsurranceTypeWidget(
-              image_url: 'assets/images/car.png',
+              image_url: 'assets/images/house.png',
               title: "House Insurrance",
               onclick: () {},
-            )
+            ),
           ],
         ),
       ),
