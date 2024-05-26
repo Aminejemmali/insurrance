@@ -19,7 +19,8 @@ This is a Flutter-based mobile application for managing various insurance plans.
    ```bash
    git clone https://github.com/yourusername/insurance-flutter-app.git
    cd insurance-flutter-app
-```
+    ```
+
 2. **Install dependencies**
     
 ```bash
