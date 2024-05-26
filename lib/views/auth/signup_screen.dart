@@ -7,7 +7,9 @@ import 'package:insurrance/src/controllers/signup_controller.dart';
 import 'package:insurrance/src/services/authentication/auth_firebase.dart';
 import 'package:insurrance/src/widgets/auth_form_field.dart';
 import 'package:insurrance/src/widgets/button_widget.dart';
+import 'package:insurrance/util/pickdate.dart';
 import 'package:insurrance/views/home/index_home.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
 
@@ -139,21 +141,59 @@ class _SignupScreenState extends State<SignupScreen> {
                         obsecureText: obscurePassword,
                       ),
                       const SizedBox(height: 16),
-                      AuthTextFormFieldWidget(
-                        hintText: 'BirthDate',
-                        prefixIconColor: AppColors.primaryColor,
-                        prefixIcon: "assets/icons/User.png",
-                        errorText: signUpController.passwordValidator,
+                      TextFormField(
+                        style: AppTextStyles.hintTextStyle1,
                         controller: signUpController.birthDate,
-                        onChanged: (value) {
-                          signUpController.update();
-                        },
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return "Field Required";
+                        readOnly: true,
+                        onTap: () async {
+                          DateTime? dateTime = await selectDate(context);
+                          if (dateTime != null) {
+                            signUpController.birthDate.text =
+                                DateFormat('yyyy-MM-dd').format(dateTime);
                           }
-                          return null;
                         },
+                        decoration: InputDecoration(
+                          hintText: "Birth date",
+                          hintStyle: AppTextStyles.hintTextStyle1,
+                          labelStyle: AppTextStyles.hintTextStyle1,
+                          errorStyle: AppTextStyles.bodyTextStyle1,
+                          contentPadding:
+                              const EdgeInsets.fromLTRB(20, 12, 20, 12),
+                          isDense: true,
+                          prefixIcon: Container(
+                            padding: const EdgeInsets.all(10),
+                            height: 20,
+                            child: FittedBox(
+                              fit: BoxFit.cover,
+                              child: ImageIcon(
+                                AssetImage("assets/icons/User.png"),
+                                color: AppColors.primaryColor,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 1, color: AppColors.primaryColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 1, color: AppColors.primaryColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          errorBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 1,
+                                color: AppColors.customDialogErrorColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                                width: 1, color: AppColors.primaryColor),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 16),
                       AuthTextFormFieldWidget(
@@ -211,37 +251,48 @@ class _SignupScreenState extends State<SignupScreen> {
                           if (_signUpFromKey.currentState!.validate()) {
                             // User data
 
-                            await UserAuth().signUpWithEmailAndPassword(
-                                context,
-                                signUpController.signUpEmailController.text,
-                                signUpController.signUpPasswordController.text);
-                            final Map<String, dynamic> userData = {
-                              "id": FirebaseAuth.instance.currentUser!.uid,
-                              "nom": signUpController
-                                  .signUpFirstNameController.text,
-                              "prenom": signUpController
-                                  .signUpLastNameController.text,
-                              "email": FirebaseAuth.instance.currentUser!.email,
-                              "password": signUpController
-                                  .signUpPasswordController.text,
-                              "date_naissance": signUpController.birthDate.text,
-                              "adresse": signUpController.address.text,
-                              "code_postale": signUpController.codePostal.text,
-                              "num_tel": signUpController.phoneNumber.text
-                            };
-                            String dataAdded = await signUpUser(userData);
-                            setState(() {
-                              errorMessage = dataAdded;
-                            });
-                            if (dataAdded == "success") {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeScreen()),
-                              );
+                            AuthResult authResult = await UserAuth()
+                                .signUpWithEmailAndPassword(
+                                    context,
+                                    signUpController.signUpEmailController.text,
+                                    signUpController
+                                        .signUpPasswordController.text);
+                            if (authResult.user != null) {
+                              final Map<String, dynamic> userData = {
+                                "id": FirebaseAuth.instance.currentUser!.uid,
+                                "nom": signUpController
+                                    .signUpFirstNameController.text,
+                                "prenom": signUpController
+                                    .signUpLastNameController.text,
+                                "email":
+                                    FirebaseAuth.instance.currentUser!.email,
+                                "password": signUpController
+                                    .signUpPasswordController.text,
+                                "date_naissance":
+                                    signUpController.birthDate.text,
+                                "adresse": signUpController.address.text,
+                                "code_postale":
+                                    signUpController.codePostal.text,
+                                "num_tel": signUpController.phoneNumber.text
+                              };
+                              String dataAdded = await signUpUser(userData);
+                              setState(() {
+                                errorMessage = dataAdded;
+                              });
+                              if (dataAdded == "success") {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => HomeScreen()),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(errorMessage)));
+                              }
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(errorMessage)));
+                                  SnackBar(
+                                      content: Text(authResult.errorMessage!)));
                             }
                           }
                           setState(() {
