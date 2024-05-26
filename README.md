@@ -1,16 +1,32 @@
-# insurrance
+# Insurance Flutter App
 
-Inssurance App By Flutter
+This is a Flutter-based mobile application for managing various insurance plans. The app allows users to view different insurance plans, check their details, and proceed to checkout.
 
-## Getting Started
+## Table of Contents
 
-This project is a starting point for a Flutter application.
+- [Installation](#installation)
+- [Usage](#usage)
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [API](#api)
+- [Contributing](#contributing)
+- [License](#license)
 
-A few resources to get you started if this is your first Flutter project:
+## Installation
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+1. **Clone the repository:**
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+   ```bash
+   git clone https://github.com/yourusername/insurance-flutter-app.git
+   cd insurance-flutter-app
+```
+2. **Install dependencies**
+    
+    ```bash
+    flutter pub get
+    ```
+3. **Run the app:**
+
+```bash
+flutter run
+```
