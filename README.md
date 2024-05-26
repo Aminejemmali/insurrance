@@ -1,6 +1,6 @@
 # insurrance
 
-A new Flutter project.
+Inssurance App By Flutter
 
 ## Getting Started
 

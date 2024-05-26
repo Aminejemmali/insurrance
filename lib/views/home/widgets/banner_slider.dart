@@ -17,16 +17,18 @@ class _HomeBannerSliderWidgetState extends State<HomeBannerSliderWidget> {
   @override
   Widget build(BuildContext context) {
     return Stack(
+      alignment: Alignment.bottomCenter, // Updated alignment for better visual structure
       children: [
         CarouselSlider(
           items: imageSliders,
           carouselController: _controller,
           options: CarouselOptions(
               autoPlay: true,
-              aspectRatio: 2 / 0.718,
+              autoPlayInterval: Duration(seconds: 5), // Ensure consistent auto-play timing
+              aspectRatio: 2.5, // Adjusted aspect ratio for a better fit
               enlargeCenterPage: true,
-              enlargeFactor: 0.3,
-              enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+              enlargeFactor: 0.9, // Enhanced visibility of the center image
+              enlargeStrategy: CenterPageEnlargeStrategy.height,
               onPageChanged: (index, reason) {
                 setState(() {
                   _current = index;
@@ -34,28 +36,23 @@ class _HomeBannerSliderWidgetState extends State<HomeBannerSliderWidget> {
               }),
         ),
         Positioned(
-          bottom: 5,
-          right: 52,
+          bottom: 10, // Adjusted for better visibility
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: imageSliders.asMap().entries.map((entry) {
               return GestureDetector(
                 onTap: () => _controller.animateToPage(entry.key),
                 child: Container(
-                    width: _current == entry.key ? 30.0 : 8.0,
-                    height: 8.0,
-                    margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                    decoration: BoxDecoration(
-                      borderRadius: _current == entry.key
-                          ? BorderRadius.circular(4)
-                          : null,
-                      shape: _current == entry.key
-                          ? BoxShape.rectangle
-                          : BoxShape.circle,
-                      color: _current == entry.key
-                          ? AppColors.primaryColor
-                          : AppColors.white,
-                    )),
+                  width: _current == entry.key ? 20.0 : 8.0, // Adjusted for better UI indication
+                  height: 8.0,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: (_current == entry.key
+                        ? AppColors.primaryColor
+                        : AppColors.white.withOpacity(0.5)), // Modified for better contrast
+                  ),
+                ),
               );
             }).toList(),
           ),
@@ -66,13 +63,13 @@ class _HomeBannerSliderWidgetState extends State<HomeBannerSliderWidget> {
 }
 
 final List<Widget> imageSliders = [
-  const SliderImageStyle(
+  SliderImageStyle(
     img: 'assets/images/banner1.png',
   ),
-  const SliderImageStyle(
+  SliderImageStyle(
     img: 'assets/images/banner2.png',
   ),
-  const SliderImageStyle(
+  SliderImageStyle(
     img: 'assets/images/banner3.png',
   ),
 ];
@@ -88,17 +85,14 @@ class SliderImageStyle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(15),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        image: DecorationImage(
+          image: AssetImage(img),
+          fit: BoxFit.cover,
         ),
       ),
-      margin: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-      child: Column(
-        children: [
-          Image.asset(img, fit: BoxFit.cover),
-        ],
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 8),
     );
   }
 }

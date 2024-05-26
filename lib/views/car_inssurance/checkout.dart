@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/model/car_plan.dart';
 import 'package:insurrance/src/model/offer.dart';
 
@@ -37,6 +38,11 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
+        
+         title: const Text(
+          'Checkout !',
+          style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold),
+        ),
         automaticallyImplyLeading: false,
         leading: IconButton(
 
@@ -50,7 +56,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
           },
         ),
         actions: [],
-        centerTitle: false,
+        centerTitle: true,
         elevation: 0,
       ),
       body: Align(
@@ -229,7 +235,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           ),
                                         ),
                                         Text(
-                                          '$total TND',
+                                          '$total USD',
                                           textAlign: TextAlign.end,
                                           style: const TextStyle(
                                             fontFamily: 'Readex Pro',
@@ -259,7 +265,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           ),
                                         ),
                                         Text(
-                                          '${tax.toString()} TND',
+                                          '${tax.toString()} USD',
                                           textAlign: TextAlign.end,
                                           style: const TextStyle(
                                             fontFamily: 'Readex Pro',
@@ -308,7 +314,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           ],
                                         ),
                                         Text(
-                                          '${total + tax} TND',
+                                          '${total + tax} USD',
                                           style: const TextStyle(
                                             fontFamily: 'Outfit',
                                             letterSpacing: 0,
@@ -441,7 +447,7 @@ class PurchaseList extends StatelessWidget {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                     child: Text(
-                      '$price TND',
+                      '$price USD',
                       textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontFamily: 'Outfit',
