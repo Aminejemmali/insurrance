@@ -5,6 +5,7 @@ import 'package:insurrance/src/controllers/edit_user_controller.dart';
 import 'package:insurrance/src/controllers/general_controller.dart';
 import 'package:insurrance/src/controllers/login_controller.dart';
 import 'package:insurrance/src/controllers/signup_controller.dart';
+import 'package:insurrance/theme/theme.dart';
 import 'package:insurrance/views/home/index_home.dart';
 import 'package:insurrance/wrapper.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Resize(
         allowtextScaling: true,
+        
         size: const Size(375, 812),
         builder: () {
           return MultiProvider(
@@ -37,10 +39,7 @@ class MyApp extends StatelessWidget {
                   create: (_) => EditUserProfileController()),
             ],
             child: MaterialApp(
-              theme: ThemeData(
-                //#E0E3E7
-                scaffoldBackgroundColor: Color(0xFFF1F4F8),
-              ),
+               theme: appTheme(),
               home: Wrapper(),
             ),
           );
