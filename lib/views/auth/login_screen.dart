@@ -22,8 +22,6 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   late final SigninController signInController;
-  // late final PusherBeamsController pusherLogic;
-  bool boolValue = false;
   bool obscurePassword = true;
 
   final GlobalKey<FormState> _loginFormKey = GlobalKey();
@@ -35,6 +33,39 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   bool loading = false;
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text("Login Error"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text("OK"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _mapFirebaseErrorToFriendlyMessage(String error) {
+    switch (error) {
+      case 'user-not-found':
+        return 'No user found with this email.';
+      case 'wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'network-request-failed':
+        return 'Network error. Please check your connection.';
+      case 'too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      default:
+        return 'An unexpected error occurred. Please try again.';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +103,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 width: 300,
                                 height: 100,
                               ),
-
                               const Text(
                                 "Welcome Back",
                                 style: AppTextStyles.bodyTextStyle8,
@@ -83,7 +113,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                 style: AppTextStyles.bodyTextStyle1,
                               ),
                               const SizedBox(height: 28),
-                              //
                               AuthTextFormFieldWidget(
                                 hintText: 'Username / Email',
                                 prefixIconColor: AppColors.primaryColor,
@@ -97,9 +126,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                   if ((value ?? "").isEmpty) {
                                     return 'Field Required';
                                   }
-                                  // if (!GetUtils.isEmail(value!)) {
-                                  //   return 'Please make sure your email address is valid';
-                                  // }
                                   return null;
                                 },
                               ),
@@ -139,7 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      // Get.toNamed(PageRoutes.forgotPasswordScreen);
+                                      // Navigate to forgot password screen
                                     },
                                     child: const Text(
                                       "Forgot Password",
@@ -160,32 +186,40 @@ class _SignInScreenState extends State<SignInScreen> {
                                     generalController
                                         .updateFormLoaderController(true);
                                     setState(() {
-                                      loading = !loading;
+                                      loading = true;
                                     });
-                                    AuthResult authResult = await UserAuth()
-                                        .signInWithEmailAndPassword(
-                                            context,
-                                            signInController
-                                                .emailController.text,
-                                            signInController
-                                                .passwordController.text);
+                                    try {
+                                      AuthResult authResult = await UserAuth()
+                                          .signInWithEmailAndPassword(
+                                              context,
+                                              signInController
+                                                  .emailController.text,
+                                              signInController
+                                                  .passwordController.text);
 
-                                    if (authResult.user != null) {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => HomeScreen()),
-                                      );
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(
-                                              content: Text(
-                                                  authResult.errorMessage ??
-                                                      "error")));
+                                      if (authResult.user != null) {
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  HomeScreen()),
+                                        );
+                                      } else {
+                                        _showErrorDialog(
+                                            _mapFirebaseErrorToFriendlyMessage(
+                                                authResult.errorMessage ??
+                                                    'An unexpected error occurred.'));
+                                      }
+                                    } catch (e) {
+                                      _showErrorDialog(
+                                          'An error occurred: ${e.toString()}');
+                                    } finally {
+                                      setState(() {
+                                        loading = false;
+                                      });
+                                      generalController
+                                          .updateFormLoaderController(false);
                                     }
-                                    setState(() {
-                                      loading = !loading;
-                                    });
                                   }
                                 },
                               ),

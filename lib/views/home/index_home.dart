@@ -34,9 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final userProvider = Provider.of<UserProvider>(context);
     
     return Scaffold(
-      appBar: AppBarWidget(
-        userModel: userProvider.user!,
-      ),
+      appBar: AppBar(),
+      drawer: AppBarWidget(userModel: userProvider.user!),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

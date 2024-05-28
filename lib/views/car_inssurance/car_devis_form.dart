@@ -14,7 +14,9 @@ import 'package:provider/provider.dart';
 
 class DevisForm extends StatefulWidget {
   final int tarif;
-  DevisForm({required this.tarif});
+  final int idtype;
+  final int idoffre;
+  DevisForm({required this.tarif , required this.idoffre , required this.idtype});
   @override
   _DevisFormState createState() => _DevisFormState();
 }
@@ -143,7 +145,7 @@ class _DevisFormState extends State<DevisForm> {
                   controller: _kilometrageAnnuelController,
                   label: 'Kilométrage Annuel',
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if ((value == null || value.isEmpty ))  {
                       return 'Please enter Kilométrage Annuel';
                     }
                     return null;
@@ -179,8 +181,8 @@ class _DevisFormState extends State<DevisForm> {
                         loading = !loading;
                       });
                       final carDevis = CarDevis(
-                        offer_id: 2,
-                        type_id: 2,
+                        offer_id: widget.idoffre,
+                        type_id: widget.idtype,
                         userid: userProvider!.uid,
                         nom: userProvider!.firstName,
                         tarif: widget.tarif.toString(),

@@ -13,7 +13,7 @@ class HabitationDevis {
   final int nbPieces;
   final String dependances;
   final bool veranda;
-  final int offreId;
+  //final int offreId;
   final int typeId;
   final String clientId;
 
@@ -32,7 +32,7 @@ class HabitationDevis {
     required this.nbPieces,
     required this.dependances,
     required this.veranda,
-    required this.offreId,
+   // required this.offreId,
     required this.typeId,
     required this.clientId,
   });
@@ -53,7 +53,7 @@ class HabitationDevis {
       nbPieces: json['nb_pieces'],
       dependances: json['dependances'],
       veranda: json['veranda'],
-      offreId: json['offre_id'],
+     // offreId: json['offre_id'],
       typeId: json['type_id'],
       clientId: json['client_id'],
     );
@@ -75,7 +75,7 @@ class HabitationDevis {
       'nb_pieces': nbPieces,
       'dependances': dependances,
       'veranda': veranda,
-      'offre_id': offreId,
+      //'offre_id': offreId,
       'type_id': typeId,
       'client_id': clientId,
     };

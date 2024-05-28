@@ -13,49 +13,59 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      centerTitle: true,
-      leading: GestureDetector(
-        onTap: () {
-          UserAuth().signOut(context);
-        },
-        child: Icon(Icons.logout , color: Color.fromARGB(255, 186, 134, 28),)
-      ),
-      actions: <Widget>[
-        Row(
-          children: [
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => UserProfileScreen(userModel: userModel,)),
-                );
-              },
-              child:  Padding(
-                padding: EdgeInsets.fromLTRB(12, 0, 16, 0),
-                child: Icon(Icons.account_box,
-                  size: 24,
-                  color: Color.fromARGB(255, 186, 134, 28),
+    return Drawer(
+      child: Column(
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+            ),
+            child: Center(
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
                 ),
               ),
             ),
-          ],
-        )
-      ],
-      title: RichText(
-        textAlign: TextAlign.center,
-        softWrap: true,
-        text: const TextSpan(
-          text: 'Insurance',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
           ),
-        ),
+          ListTile(
+            leading: Icon(Icons.business),
+            title: Text('Mes Devsies'),
+            onTap: () {
+             // Navigator.of(context).pushNamed('/services');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Paramètres'),
+            onTap: () {
+             // Navigator.of(context).pushNamed('/settings');
+            },
+          ),
+          Spacer(), // Pushes the user information and logout to the bottom
+          Divider(),
+
+          ListTile(
+            leading: Icon(Icons.person),
+            title: Text('User Information'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserProfileScreen(userModel: userModel,)),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Logout'),
+            onTap: () {
+              UserAuth().signOut(context);
+            },
+          ),
+        ],
       ),
-      backgroundColor: AppColors.white,
-      elevation: 0,
     );
   }
 
