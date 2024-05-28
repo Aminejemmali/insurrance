@@ -6,7 +6,11 @@ import 'package:insurrance/src/controllers/edit_user_controller.dart';
 import 'package:insurrance/src/controllers/general_controller.dart';
 import 'package:insurrance/src/controllers/login_controller.dart';
 import 'package:insurrance/src/controllers/signup_controller.dart';
+<<<<<<< HEAD
 import 'package:insurrance/src/providers/user_provideer.dart';
+=======
+import 'package:insurrance/theme/theme.dart';
+>>>>>>> b74e8897daf201f4d5fd8bd0edb4cc2256f66794
 import 'package:insurrance/views/home/index_home.dart';
 import 'package:insurrance/wrapper.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +34,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Resize(
         allowtextScaling: true,
+        
         size: const Size(375, 812),
         builder: () {
           return MultiProvider(
@@ -40,6 +45,7 @@ class MyApp extends StatelessWidget {
               ChangeNotifierProvider(
                   create: (_) => EditUserProfileController()),
             ],
+<<<<<<< HEAD
             child: MultiProvider(
               providers: [
                 ChangeNotifierProvider(create: (_) => UserProvider()),
@@ -51,6 +57,11 @@ class MyApp extends StatelessWidget {
                 ),
                 home: Wrapper(),
               ),
+=======
+            child: MaterialApp(
+               theme: appTheme(),
+              home: Wrapper(),
+>>>>>>> b74e8897daf201f4d5fd8bd0edb4cc2256f66794
             ),
           );
         });
