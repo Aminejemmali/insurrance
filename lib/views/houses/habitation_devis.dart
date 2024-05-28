@@ -35,9 +35,9 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
           key: _formKey,
           child: ListView(
             children: <Widget>[
-              TextFormField(
+              buildTextFormField(
                 controller: _typeLogementController,
-                decoration: InputDecoration(labelText: 'Type de Logement'),
+                label: 'Type de Logement',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Type de Logement';
@@ -45,9 +45,9 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
                   return null;
                 },
               ),
-              TextFormField(
+              buildTextFormField(
                 controller: _adresseLogementController,
-                decoration: InputDecoration(labelText: 'Adresse de Logement'),
+                label: 'Adresse de Logement',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Adresse de Logement';
@@ -55,10 +55,9 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
                   return null;
                 },
               ),
-              TextFormField(
+              buildTextFormField(
                 controller: _dateConstructionController,
-                decoration: InputDecoration(
-                    labelText: 'Date de Construction (yyyy-MM-dd)'),
+                label: 'Date de Construction (yyyy-MM-dd)',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Date de Construction';
@@ -88,9 +87,9 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
                   return null;
                 },
               ),
-              TextFormField(
+              buildTextFormField(
                 controller: _dependancesController,
-                decoration: InputDecoration(labelText: 'Dépendances'),
+                label:  'Dépendances',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter Dépendances';
@@ -142,4 +141,51 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
       ),
     );
   }
+  Widget buildTextFormField({
+  required String label,
+  required TextEditingController controller,
+  bool readOnly = false,
+  void Function()? onTap,
+  String? Function(String?)? validator,
+}) {
+  return SizedBox(
+    height: 68.0,
+    child: Container(
+      margin: EdgeInsets.symmetric(vertical: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(255, 197, 147, 30).withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        controller: controller,
+        readOnly: readOnly,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: readOnly ? 'Cliquez pour choisir un fichier' : '',
+          suffixIcon: readOnly ? Icon(Icons.lock) : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        onTap: onTap,
+        validator: validator,
+      ),
+    ),
+  );
+}
 }

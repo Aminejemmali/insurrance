@@ -15,6 +15,9 @@ class CarDevis {
   final String kilometrageAnnuel;
   final String permis;
   final String historiqueDesSinistres;
+  final String userid;
+  final int type_id;
+  final int offer_id;
 
   CarDevis({
     required this.nom,
@@ -33,6 +36,9 @@ class CarDevis {
     required this.kilometrageAnnuel,
     required this.permis,
     required this.historiqueDesSinistres,
+    required this.userid,
+    required this.offer_id,
+    required this.type_id,
   });
 
   factory CarDevis.fromJson(Map<String, dynamic> json) {
@@ -53,6 +59,9 @@ class CarDevis {
       kilometrageAnnuel: json['Kilometrage_annuel'] ?? '',
       permis: json['permis'] ?? '',
       historiqueDesSinistres: json['Historique_des_sinistres'] ?? '',
+      userid: json['client_id'] ?? '',
+      offer_id: json['offre_id'] ?? 0,
+      type_id: json ['type_id'] ?? 0
     );
   }
 
@@ -74,6 +83,9 @@ class CarDevis {
       'Kilometrage_annuel': kilometrageAnnuel,
       'permis': permis,
       'Historique_des_sinistres': historiqueDesSinistres,
+      'offre_id':  offer_id,
+      'type_id': type_id,
+      'client_id':userid
     };
   }
 }
