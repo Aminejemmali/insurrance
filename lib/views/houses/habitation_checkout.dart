@@ -338,6 +338,7 @@ class _HabitationCheckoutState extends State<HabitationCheckout> {
                                   MaterialPageRoute(
                                       builder: (context) => HabitationDevisForm(
                                             tarif: total.toInt(),
+                                            idtype: widget.habitation.id  ,
                                           )),
                                 );
                               },

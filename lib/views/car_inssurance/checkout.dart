@@ -337,6 +337,8 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                   MaterialPageRoute(
                                       builder: (context) => DevisForm(
                                             tarif: total.toInt(),
+                                            idtype: widget.carInsurancePlan.id,
+                                            idoffre: widget.offer!.id,
                                           )),
                                 );
                               },

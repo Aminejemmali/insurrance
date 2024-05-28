@@ -1,66 +1,37 @@
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:flutter/material.dart';
-// import 'package:flutter_stripe/flutter_stripe.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:convert';
+/*import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
-// import 'package:insurrance/api.dart';
 
-// class PaymentService {
-//   Future<bool> handlePayment(BuildContext context, int amount) async {
-//     //  final paymentIntentData = await createPaymentIntent(context, amount);
 
-//     if (true) {
-//       //paymentIntentData != null) {
-//       await Stripe.instance.initPaymentSheet(
-//         paymentSheetParameters: SetupPaymentSheetParameters(
-//           paymentIntentClientSecret: FirebaseAuth
-//               .instance.currentUser!.uid, //paymentIntentData['client_secret'],
-//           merchantDisplayName: 'Insurrance',
-//         ),
-//       );
+class Stripe_Payment extends StatefulWidget {
+  @override
+  _Stripe_Payment createState() => _Stripe_Payment();
+}
 
-//       try {
-//         await Stripe.instance.presentPaymentSheet();
-//         return true;
-//       } catch (e) {
-//         return false;
-//       }
-//     }
-//   }
+class _Stripe_Payment extends State<Stripe_Payment> {
 
-//   Future<Map<String, dynamic>?> createPaymentIntent(
-//       BuildContext context, int amount) async {
-//     try {
-//       final response = await http.post(
-//         Uri.parse('$base_url'),
-//         headers: {'Content-Type': 'application/json'},
-//         body: jsonEncode({
-//           'amount': amount,
-//           'currency': 'usd',
-//         }),
-//       );
-//       return jsonDecode(response.body);
-//     } catch (e) {
-//       showCustomDialog(context, 'Error', e.toString());
-//       return null;
-//     }
-//   }
 
-//   void showCustomDialog(BuildContext context, String title, String content) {
-//     showDialog(
-//       context: context,
-//       builder: (BuildContext context) => AlertDialog(
-//         title: Text(title),
-//         content: Text(content),
-//         actions: [
-//           TextButton(
-//             onPressed: () => Navigator.of(context).pop(),
-//             child: Text('OK'),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Stripe Payment'),
+        ),
+        body: Center(
+          child: PaymentElementForm(
+            key: _formKey,
+            autopayMode: PaymentElementAutopayMode.eager,
+            paymentMethods: [
+              PaymentIntentsPaymentMethod.card(),
+            ],
+            merchantConfiguration: MerchantConfiguration(
+              publishableKey: Stripe.publishableKey,
+              appleMerchantIdentifier: 'YOUR_APPLE_MERCHANT_IDENTIFIER', // For iOS
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}*/
