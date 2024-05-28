@@ -72,10 +72,10 @@ class _DevisFormState extends State<DevisForm> {
             key: _formKey,
             child: ListView(
               children: <Widget>[
-                TextFormField(
+                buildTextFormField(
                   readOnly: true,
                   controller: _bulletinN3Controller,
-                  decoration: InputDecoration(labelText: 'Bulletin N3'),
+                  label: 'Bulletin N3',
                   onTap: () async {
                     String? path = await uploadPDF();
                     if (path != null) {
@@ -89,9 +89,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _immatriculeController,
-                  decoration: InputDecoration(labelText: 'Immatricule'),
+                  label: 'Immatricule',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Immatricule';
@@ -99,9 +99,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _marqueController,
-                  decoration: InputDecoration(labelText: 'Marque'),
+                  label:  'Marque',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Marque';
@@ -109,9 +109,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _modeleController,
-                  decoration: InputDecoration(labelText: 'Modèle'),
+                  label:  'Modèle',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Modèle';
@@ -119,9 +119,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _couleurController,
-                  decoration: InputDecoration(labelText: 'Couleur'),
+                  label:  'Couleur',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Couleur';
@@ -129,9 +129,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _carburantController,
-                  decoration: InputDecoration(labelText: 'Carburant'),
+                  label: 'Carburant',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Carburant';
@@ -139,9 +139,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _kilometrageAnnuelController,
-                  decoration: InputDecoration(labelText: 'Kilométrage Annuel'),
+                  label: 'Kilométrage Annuel',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Kilométrage Annuel';
@@ -149,9 +149,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _permisController,
-                  decoration: InputDecoration(labelText: 'Permis'),
+                  label:  'Permis',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Permis';
@@ -159,10 +159,9 @@ class _DevisFormState extends State<DevisForm> {
                     return null;
                   },
                 ),
-                TextFormField(
+                buildTextFormField(
                   controller: _historiqueDesSinistresController,
-                  decoration:
-                      InputDecoration(labelText: 'Historique des Sinistres'),
+                  label: 'Historique des Sinistres',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Historique des Sinistres';
@@ -180,6 +179,9 @@ class _DevisFormState extends State<DevisForm> {
                         loading = !loading;
                       });
                       final carDevis = CarDevis(
+                        offer_id: 2,
+                        type_id: 2,
+                        userid: userProvider!.uid,
                         nom: userProvider!.firstName,
                         tarif: widget.tarif.toString(),
                         prenom: userProvider.lastName,
@@ -198,8 +200,8 @@ class _DevisFormState extends State<DevisForm> {
                         historiqueDesSinistres:
                             _historiqueDesSinistresController.text,
                       );
-                      // print(carDevis.toJson());
-                      bool sent = await submitCarDevis(carDevis);
+                      print(carDevis.toJson());
+                      bool sent = await submitCarDevis(carDevis, context);
                       setState(() {
                         loading = !loading;
                       });
@@ -217,6 +219,56 @@ class _DevisFormState extends State<DevisForm> {
       ),
     );
   }
+
+  @override
+Widget buildTextFormField({
+  required String label,
+  required TextEditingController controller,
+  bool readOnly = false,
+  void Function()? onTap,
+  String? Function(String?)? validator,
+}) {
+  return SizedBox(
+    height: 82.0,
+    child: Container(
+      margin: EdgeInsets.symmetric(vertical: 10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(255, 197, 147, 30).withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: TextFormField(
+        controller: controller,
+        readOnly: readOnly,
+        decoration: InputDecoration(
+          labelText: label,
+          hintText: readOnly ? 'Cliquez pour choisir un fichier' : '',
+          suffixIcon: readOnly ? Icon(Icons.lock) : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.red),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        onTap: onTap,
+        validator: validator,
+      ),
+    ),
+  );
+}
+
 
   @override
   void dispose() {

@@ -21,16 +21,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int isLawyerListSelected = 0;
   UserModel? userModel;
+ 
 
   @override
   void initState() {
     super.initState();
+     
   }
 
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
-    print(userProvider.user!.firstName);
+    
     return Scaffold(
       appBar: AppBarWidget(
         userModel: userProvider.user!,
