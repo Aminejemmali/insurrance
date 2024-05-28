@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:insurrance/src/api/car_inssurance/get_car_type.dart';
 import 'package:insurrance/src/api/habitation.dart';
-
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/model/habitation.dart';
-import 'package:insurrance/views/car_inssurance/checkout.dart';
 import 'package:insurrance/views/houses/habitation_checkout.dart';
 
 class HabitationPlans extends StatefulWidget {
@@ -29,7 +26,10 @@ class _HabitationPlansState extends State<HabitationPlans> {
         title: const Text(
           'Select Offer',
           style: TextStyle(
-              color: AppColors.primaryColor, fontWeight: FontWeight.bold),
+            color: AppColors.primaryColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
       ),
       body: FutureBuilder<List<Habitation>>(
@@ -47,11 +47,11 @@ class _HabitationPlansState extends State<HabitationPlans> {
               itemBuilder: (context, index) {
                 final plan = snapshot.data![index];
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  margin: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
-                  elevation: 5,
+                  elevation: 6,
                   child: Padding(
                     padding: EdgeInsets.all(16.0),
                     child: ListTile(
@@ -59,7 +59,7 @@ class _HabitationPlansState extends State<HabitationPlans> {
                       title: Text(
                         plan.nom,
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 22.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -71,7 +71,7 @@ class _HabitationPlansState extends State<HabitationPlans> {
                             Text(
                               'Price:',
                               style: TextStyle(
-                                fontSize: 16.0,
+                                fontSize: 18.0,
                                 color: Colors.black54,
                               ),
                             ),
@@ -79,19 +79,32 @@ class _HabitationPlansState extends State<HabitationPlans> {
                             Text(
                               '${plan.tarif} €',
                               style: TextStyle(
-                                fontSize: 24.0,
+                                fontSize: 26.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.green,
                               ),
                             ),
-                            SizedBox(height: 8.0),
-                            ..._buildPlanDetails(plan),
+                            SizedBox(height: 12.0),
+                            Text(
+                              'More Info:',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                _showBottomSheet(context, plan);
+                              },
+                              child: Text('Show Details'),
+                            ),
                           ],
                         ),
                       ),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         color: Colors.blue,
+                        size: 28,
                       ),
                       onTap: () {
                         Navigator.push(
@@ -114,16 +127,46 @@ class _HabitationPlansState extends State<HabitationPlans> {
     );
   }
 
+  void _showBottomSheet(BuildContext context, Habitation plan) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              Text(
+                'Details for ${plan.nom}',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              ..._buildPlanDetails(plan),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Close'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   List<Widget> _buildPlanDetails(Habitation plan) {
     return [
-      _buildIconRow('Responsabilite', plan.responsabilite ? "coche" : ""),
-      _buildIconRow('Defense', plan.defense ? "coche" : ""),
+      _buildIconRow('Responsabilité', plan.responsabilite ? "coche" : ""),
+      _buildIconRow('Défense', plan.defense ? "coche" : ""),
       _buildIconRow('Incendie', plan.incendie ? "coche" : ""),
-      _buildIconRow('Degats', plan.degats ? "coche" : ""),
-      _buildIconRow(
-          'Evenement Climatique', plan.evenementClimatique ? "coche" : ""),
+      _buildIconRow('Dégâts', plan.degats ? "coche" : ""),
+      _buildIconRow('Événement Climatique', plan.evenementClimatique ? "coche" : ""),
       _buildIconRow('Catastrophes', plan.catastrophes ? "coche" : ""),
-      _buildIconRow('Attentas', plan.attentas ? "coche" : ""),
+      _buildIconRow('Attentats', plan.attentas ? "coche" : ""),
       _buildIconRow('Assistance', plan.assistance ? "coche" : ""),
       _buildIconRow('Bris', plan.bris ? "coche" : ""),
       _buildIconRow('Vol Vandalisme', plan.volVandalisme ? "coche" : ""),
@@ -139,12 +182,13 @@ class _HabitationPlansState extends State<HabitationPlans> {
           Expanded(
             child: Text(
               '$label: ',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 18.0),
             ),
           ),
           Icon(
             value == 'coche' ? Icons.check_circle : Icons.cancel,
             color: value == 'coche' ? Colors.green : Colors.red,
+            size: 22,
           ),
         ],
       ),

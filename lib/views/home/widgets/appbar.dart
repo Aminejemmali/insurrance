@@ -19,10 +19,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         onTap: () {
           UserAuth().signOut(context);
         },
-        child: Image.asset(
-          'assets/icons/user-avatar.png',
-          scale: 1.5.h,
-        ),
+        child: Icon(Icons.logout , color: Color.fromARGB(255, 186, 134, 28),)
       ),
       actions: <Widget>[
         Row(
@@ -34,11 +31,11 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   MaterialPageRoute(builder: (context) => UserProfileScreen(userModel: userModel,)),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(12, 0, 16, 0),
-                child: Image.asset(
-                  "assets/icons/user-avatar.png",
-                  height: 32.h,
+              child:  Padding(
+                padding: EdgeInsets.fromLTRB(12, 0, 16, 0),
+                child: Icon(Icons.account_box,
+                  size: 24,
+                  color: Color.fromARGB(255, 186, 134, 28),
                 ),
               ),
             ),
