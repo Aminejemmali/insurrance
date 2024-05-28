@@ -1,10 +1,14 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:insurrance/src/api/car_inssurance/create_devis.dart';
 import 'package:insurrance/src/providers/user_provideer.dart';
 import 'package:insurrance/src/services/authentication/stripe/payment_service.dart';
 import 'package:intl/intl.dart';
-import 'package:insurrance/src/model/devis.dart';
+import 'package:insurrance/src/model/car_devis.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:provider/provider.dart';
 
@@ -28,9 +32,33 @@ class _DevisFormState extends State<DevisForm> {
   final _historiqueDesSinistresController = TextEditingController();
   final _dateFormat = DateFormat('yyyy-MM-dd');
 
+  bool loading = false;
+  Future<String?> uploadPDF() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      try {
+        FirebaseStorage storage = FirebaseStorage.instance;
+        Reference ref = storage.ref().child('pdfs/${file.name}');
+        UploadTask uploadTask = ref.putFile(File(file.path!));
+        TaskSnapshot snapshot = await uploadTask;
+        String downloadUrl = await snapshot.ref.getDownloadURL();
+        return downloadUrl;
+      } catch (e) {
+        print('Error uploading file: $e');
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    bool loading = false;
     final userProvider = Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
@@ -45,10 +73,15 @@ class _DevisFormState extends State<DevisForm> {
             child: ListView(
               children: <Widget>[
                 TextFormField(
-                  readOnly: false,
+                  readOnly: true,
                   controller: _bulletinN3Controller,
                   decoration: InputDecoration(labelText: 'Bulletin N3'),
-                  onTap: () {},
+                  onTap: () async {
+                    String? path = await uploadPDF();
+                    if (path != null) {
+                      _bulletinN3Controller.text = path;
+                    }
+                  },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter Bulletin N3';
@@ -151,9 +184,9 @@ class _DevisFormState extends State<DevisForm> {
                         tarif: widget.tarif.toString(),
                         prenom: userProvider.lastName,
                         email: FirebaseAuth.instance.currentUser!.email!,
-                        adresse: userProvider.emailAddress,
-                        codePostale: userProvider.postalCode!,
-                        numTel: userProvider.phoneNumber!,
+                        adresse: userProvider.address ?? " ",
+                        codePostale: userProvider.postalCode ?? " ",
+                        numTel: userProvider.phoneNumber ?? " ",
                         bulletinN3: _bulletinN3Controller.text,
                         immatricule: _immatriculeController.text,
                         marque: _marqueController.text,
@@ -165,7 +198,7 @@ class _DevisFormState extends State<DevisForm> {
                         historiqueDesSinistres:
                             _historiqueDesSinistresController.text,
                       );
-
+                      // print(carDevis.toJson());
                       bool sent = await submitCarDevis(carDevis);
                       setState(() {
                         loading = !loading;

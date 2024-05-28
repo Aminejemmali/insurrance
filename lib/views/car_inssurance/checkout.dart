@@ -7,7 +7,7 @@ import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/model/car_plan.dart';
 import 'package:insurrance/src/model/habitation.dart';
 import 'package:insurrance/src/model/offer.dart';
-import 'package:insurrance/views/car/checkout/car_devis_form.dart';
+import 'package:insurrance/views/car_inssurance/car_devis_form.dart';
 
 
 class CheckoutWidget extends StatefulWidget {

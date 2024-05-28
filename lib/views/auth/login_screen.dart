@@ -6,6 +6,7 @@ import 'package:insurrance/src/controllers/login_controller.dart';
 import 'package:insurrance/src/services/authentication/auth_firebase.dart';
 import 'package:insurrance/src/widgets/auth_form_field.dart';
 import 'package:insurrance/src/widgets/button_widget.dart';
+import 'package:insurrance/views/home/index_home.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';
@@ -33,9 +34,10 @@ class _SignInScreenState extends State<SignInScreen> {
     signInController = context.read<SigninController>();
   }
 
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
-    bool loading = false;
     return Consumer<GeneralController>(
       builder: (context, generalController, _) {
         return GestureDetector(
@@ -65,8 +67,12 @@ class _SignInScreenState extends State<SignInScreen> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Image.asset("assets/images/sk.png",width: 300,height: 100,),
-                              
+                              Image.asset(
+                                "assets/images/sk.png",
+                                width: 300,
+                                height: 100,
+                              ),
+
                               const Text(
                                 "Welcome Back",
                                 style: AppTextStyles.bodyTextStyle8,
@@ -165,6 +171,11 @@ class _SignInScreenState extends State<SignInScreen> {
                                                 .passwordController.text);
 
                                     if (authResult.user != null) {
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => HomeScreen()),
+                                      );
                                     } else {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(SnackBar(
@@ -172,6 +183,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                                   authResult.errorMessage ??
                                                       "error")));
                                     }
+                                    setState(() {
+                                      loading = !loading;
+                                    });
                                   }
                                 },
                               ),

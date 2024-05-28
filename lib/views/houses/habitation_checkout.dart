@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/model/habitation.dart';
+import 'package:insurrance/src/model/habitation_devis.dart';
 import 'package:insurrance/src/model/offer.dart';
-import 'package:insurrance/views/car/checkout/car_devis_form.dart';
+import 'package:insurrance/views/car_inssurance/car_devis_form.dart';
+import 'package:insurrance/views/houses/habitation_devis.dart';
 
 
 class HabitationCheckout extends StatefulWidget {
@@ -334,7 +336,7 @@ class _HabitationCheckoutState extends State<HabitationCheckout> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => DevisForm(
+                                      builder: (context) => HabitationDevisForm(
                                             tarif: total.toInt(),
                                           )),
                                 );

@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:insurrance/api.dart';
 import 'dart:convert';
 
-import 'package:insurrance/src/model/devis.dart';
+import 'package:insurrance/src/model/car_devis.dart';
 
 Future<bool> submitCarDevis(CarDevis carDevis) async {
   final url = Uri.parse('$base_url/api/autos/create-devis');
