@@ -5,9 +5,10 @@ import 'package:insurrance/src/model/user_model.dart';
 import 'package:insurrance/src/providers/user_provideer.dart';
 import 'package:insurrance/views/home/widgets/appbar.dart';
 import 'package:insurrance/views/home/widgets/banner_slider.dart';
-import 'package:insurrance/views/home/widgets/car_insurrance_list.dart';
+import 'package:insurrance/views/car_inssurance/car_insurrance_list.dart';
 import 'package:insurrance/views/home/widgets/insurance_types.dart';
 import 'package:insurrance/views/home/widgets/search_filter_widget.dart';
+import 'package:insurrance/views/houses/houses_list.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -41,8 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  0, 12, 0, 20), 
+              padding: const EdgeInsets.fromLTRB(0, 12, 0, 20),
               child: HomeBannerSliderWidget(),
             ),
             SearchFilterWidget(
@@ -50,7 +50,6 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: TextEditingController(),
             ),
             SizedBox(height: 20),
-           
             InsurranceTypeWidget(
               image_url: 'assets/images/car.png',
               title: "Cars Insurrance",
@@ -61,11 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            SizedBox(height: 20), 
+            SizedBox(height: 20),
             InsurranceTypeWidget(
               image_url: 'assets/images/house.png',
               title: "House Insurrance",
-              onclick: () {},
+              onclick: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HabitationPlans()),
+                );
+              },
             ),
           ],
         ),

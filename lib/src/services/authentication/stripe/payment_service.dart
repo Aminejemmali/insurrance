@@ -26,7 +26,6 @@ class PaymentService {
         return false;
       }
     }
- 
   }
 
   Future<Map<String, dynamic>?> createPaymentIntent(

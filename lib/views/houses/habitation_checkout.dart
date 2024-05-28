@@ -4,23 +4,22 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:insurrance/src/config/app_colors.dart';
-import 'package:insurrance/src/model/car_plan.dart';
 import 'package:insurrance/src/model/habitation.dart';
 import 'package:insurrance/src/model/offer.dart';
 import 'package:insurrance/views/car/checkout/car_devis_form.dart';
 
 
-class CheckoutWidget extends StatefulWidget {
- final CarInsurancePlan carInsurancePlan;
+class HabitationCheckout extends StatefulWidget {
+ final Habitation habitation;
 
   Offer? offer;
-  CheckoutWidget({super.key, required this.carInsurancePlan, this.offer});
+  HabitationCheckout({super.key, required this.habitation, this.offer});
 
   @override
-  State<CheckoutWidget> createState() => _CheckoutWidgetState();
+  State<HabitationCheckout> createState() => _HabitationCheckoutState();
 }
 
-class _CheckoutWidgetState extends State<CheckoutWidget> {
+class _HabitationCheckoutState extends State<HabitationCheckout> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -35,7 +34,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
 
   @override
   Widget build(BuildContext context) {
-    double total = double.parse(widget.carInsurancePlan.price) +
+    double total = widget.habitation.tarif +
         double.parse(widget.offer != null ? widget.offer!.price : "0");
 
     double tax = 10;
@@ -129,9 +128,9 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                               scrollDirection: Axis.vertical,
                               children: [
                                 PurchaseList(
-                                  name: widget.carInsurancePlan.name,
-                                  price: widget.carInsurancePlan.price,
-                                  desc: widget.carInsurancePlan.name,
+                                  name: widget.habitation.nom,
+                                  price: widget.habitation.tarif.toString(),
+                                  desc: widget.habitation.nom,
                                   showRemove: false,
                                   onclick: () {},
                                 ),
