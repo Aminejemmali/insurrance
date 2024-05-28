@@ -25,7 +25,11 @@ class _InsurancePlanListState extends State<InsurancePlanList> {
         centerTitle: true,
         title: const Text(
           'Select Offer',
-          style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: AppColors.primaryColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
         ),
       ),
       body: FutureBuilder<List<CarInsurancePlan>>(
@@ -43,11 +47,11 @@ class _InsurancePlanListState extends State<InsurancePlanList> {
               itemBuilder: (context, index) {
                 final plan = snapshot.data![index];
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  margin: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
-                  elevation: 5,
+                  elevation: 6,
                   child: Padding(
                     padding: EdgeInsets.all(16.0),
                     child: ListTile(
@@ -55,7 +59,7 @@ class _InsurancePlanListState extends State<InsurancePlanList> {
                       title: Text(
                         plan.name,
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 22.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -67,27 +71,40 @@ class _InsurancePlanListState extends State<InsurancePlanList> {
                             Text(
                               'Price:',
                               style: TextStyle(
-                                fontSize: 16.0,
+                                fontSize: 18.0,
                                 color: Colors.black54,
                               ),
                             ),
                             SizedBox(height: 4.0),
                             Text(
-                              '\$${plan.price}',
+                              '${plan.price} €',
                               style: TextStyle(
-                                fontSize: 24.0,
+                                fontSize: 26.0,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.green,
                               ),
                             ),
-                            SizedBox(height: 8.0),
-                            ..._buildPlanDetails(plan),
+                            SizedBox(height: 12.0),
+                            Text(
+                              'More Info:',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                _showBottomSheet(context, plan);
+                              },
+                              child: Text('Show Details'),
+                            ),
                           ],
                         ),
                       ),
                       trailing: Icon(
                         Icons.arrow_forward_ios,
                         color: Colors.blue,
+                        size: 28,
                       ),
                       onTap: () {
                         Navigator.push(
@@ -110,30 +127,60 @@ class _InsurancePlanListState extends State<InsurancePlanList> {
     );
   }
 
-  List<Widget> _buildPlanDetails(CarInsurancePlan plan) {
-  return [
-    _buildIconRow('Liability to Others', plan.liabilityToOthers ?? ""),
-    _buildIconRow('Defense', plan.defense ?? ""),
-    _buildIconRow('Assistance', plan.assistance ?? ""),
-    _buildIconRow('Coverage', plan.coverage ?? ""),
-    _buildIconRow('Storm', plan.storm ?? ""),
-    _buildIconRow('Terrorism', plan.terrorism ?? ""),
-    _buildIconRow('Breakage', plan.breakage ?? ""),
-    _buildIconRow('Fire', plan.fire ?? ""),
-    _buildIconRow('Theft', plan.theft ?? ""),
-    _buildIconRow('Compensation', plan.compensation ?? ""),
-    _buildIconRow('Accident Damage', plan.accidentDamage ?? ""),
-    _buildIconRow('Extended Breakage', plan.extendedBreakage ?? ""),
-    _buildIconRow('Contents', plan.contents ?? ""),
-    _buildIconRow('Key Assistance', plan.keyAssistance ?? ""),
-    _buildIconRow('Roadside Assistance 0km', plan.roadsideAssistance0km ?? ""),
-    _buildIconRow('Vehicle Assistance', plan.vehicleAssistance ?? ""),
-    _buildIconRow('Extension', plan.extension ?? ""),
-    _buildIconRow('Redemption', plan.redemption ?? ""),
-    _buildIconRow('Personal Guarantee', plan.personalGuarantee ?? ""),
-  ];
-}
+  void _showBottomSheet(BuildContext context, CarInsurancePlan plan) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              Text(
+                'Details for ${plan.name}',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              ..._buildPlanDetails(plan),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Close'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
+  List<Widget> _buildPlanDetails(CarInsurancePlan plan) {
+    return [
+      _buildIconRow('Liability to Others', plan.liabilityToOthers ?? ""),
+      _buildIconRow('Defense', plan.defense ?? ""),
+      _buildIconRow('Assistance', plan.assistance ?? ""),
+      _buildIconRow('Coverage', plan.coverage ?? ""),
+      _buildIconRow('Storm', plan.storm ?? ""),
+      _buildIconRow('Terrorism', plan.terrorism ?? ""),
+      _buildIconRow('Breakage', plan.breakage ?? ""),
+      _buildIconRow('Fire', plan.fire ?? ""),
+      _buildIconRow('Theft', plan.theft ?? ""),
+      _buildIconRow('Compensation', plan.compensation ?? ""),
+      _buildIconRow('Accident Damage', plan.accidentDamage ?? ""),
+      _buildIconRow('Extended Breakage', plan.extendedBreakage ?? ""),
+      _buildIconRow('Contents', plan.contents ?? ""),
+      _buildIconRow('Key Assistance', plan.keyAssistance ?? ""),
+      _buildIconRow('Roadside Assistance 0km', plan.roadsideAssistance0km ?? ""),
+      _buildIconRow('Vehicle Assistance', plan.vehicleAssistance ?? ""),
+      _buildIconRow('Extension', plan.extension ?? ""),
+      _buildIconRow('Redemption', plan.redemption ?? ""),
+      _buildIconRow('Personal Guarantee', plan.personalGuarantee ?? ""),
+    ];
+  }
 
   Widget _buildIconRow(String label, String value) {
     return Padding(
@@ -143,12 +190,13 @@ class _InsurancePlanListState extends State<InsurancePlanList> {
           Expanded(
             child: Text(
               '$label: ',
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 18.0),
             ),
           ),
           Icon(
             value == 'coche' ? Icons.check_circle : Icons.cancel,
             color: value == 'coche' ? Colors.green : Colors.red,
+            size: 22,
           ),
         ],
       ),

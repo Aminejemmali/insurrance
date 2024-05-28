@@ -239,7 +239,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           ),
                                         ),
                                         Text(
-                                          '$total USD',
+                                          '$total € ',
                                           textAlign: TextAlign.end,
                                           style: const TextStyle(
                                             fontFamily: 'Readex Pro',
@@ -269,7 +269,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           ),
                                         ),
                                         Text(
-                                          '${tax.toString()} USD',
+                                          '${tax.toString()} € ',
                                           textAlign: TextAlign.end,
                                           style: const TextStyle(
                                             fontFamily: 'Readex Pro',
@@ -318,7 +318,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                           ],
                                         ),
                                         Text(
-                                          '${total + tax} USD',
+                                          '${total + tax} €',
                                           style: const TextStyle(
                                             fontFamily: 'Outfit',
                                             letterSpacing: 0,
@@ -457,7 +457,7 @@ class PurchaseList extends StatelessWidget {
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(8, 0, 0, 0),
                     child: Text(
-                      '$price USD',
+                      '$price €',
                       textAlign: TextAlign.end,
                       style: const TextStyle(
                         fontFamily: 'Outfit',

@@ -24,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -37,41 +36,54 @@ class _HomeScreenState extends State<HomeScreen> {
         userModel: userProvider.user!,
       ),
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 12, 0, 20),
-              child: HomeBannerSliderWidget(),
-            ),
-            SearchFilterWidget(
-              onSearchTap: () {},
-              controller: TextEditingController(),
-            ),
-            SizedBox(height: 20),
-            InsurranceTypeWidget(
-              image_url: 'assets/images/car.png',
-              title: "Cars Insurrance",
-              onclick: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => InsurancePlanList()),
-                );
-              },
-            ),
-            SizedBox(height: 20),
-            InsurranceTypeWidget(
-              image_url: 'assets/images/house.png',
-              title: "House Insurrance",
-              onclick: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HabitationPlans()),
-                );
-              },
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 12, 0, 20),
+                child: HomeBannerSliderWidget(),
+              ),
+              SearchFilterWidget(
+                onSearchTap: () {},
+                controller: TextEditingController(),
+              ),
+              SizedBox(height: 30),
+              Text( 'hi ${userProvider.user!.firstName}'+
+                ",  Explore Our Insurance Plans",
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromARGB(255, 186, 134, 28),
+                    ),
+              ),
+              SizedBox(height: 20),
+              InsurranceTypeWidget(
+                image_url: 'assets/images/car.png',
+                title: "Car Insurance",
+                description: "Protect your car with our comprehensive plans.",
+                onclick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => InsurancePlanList()),
+                  );
+                },
+              ),
+              SizedBox(height: 30),
+              InsurranceTypeWidget(
+                image_url: 'assets/images/house.png',
+                title: "House Insurance",
+                description: "Keep your home safe and secure.",
+                onclick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HabitationPlans()),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

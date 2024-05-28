@@ -240,7 +240,7 @@ class _HabitationCheckoutState extends State<HabitationCheckout> {
                                           ),
                                         ),
                                         Text(
-                                          '$total USD',
+                                          '$total €',
                                           textAlign: TextAlign.end,
                                           style: const TextStyle(
                                             fontFamily: 'Readex Pro',
@@ -270,7 +270,7 @@ class _HabitationCheckoutState extends State<HabitationCheckout> {
                                           ),
                                         ),
                                         Text(
-                                          '${tax.toString()} USD',
+                                          '${tax.toString()} €',
                                           textAlign: TextAlign.end,
                                           style: const TextStyle(
                                             fontFamily: 'Readex Pro',
@@ -319,7 +319,7 @@ class _HabitationCheckoutState extends State<HabitationCheckout> {
                                           ],
                                         ),
                                         Text(
-                                          '${total + tax} USD',
+                                          '${total + tax} €',
                                           style: const TextStyle(
                                             fontFamily: 'Outfit',
                                             letterSpacing: 0,

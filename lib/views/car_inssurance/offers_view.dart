@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:insurrance/src/api/offre_api.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/config/app_text_style.dart';
@@ -20,6 +19,14 @@ class OfferListWidget extends StatefulWidget {
 }
 
 class _OfferListWidgetState extends State<OfferListWidget> {
+  late Future<List<Offer>> futureOffers;
+
+  @override
+  void initState() {
+    super.initState();
+    futureOffers = fetchOffers();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,30 +34,15 @@ class _OfferListWidgetState extends State<OfferListWidget> {
         centerTitle: true,
         title: const Text(
           'Select Extra Offers',
-          style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: AppColors.white,
-        iconTheme: const IconThemeData(color: AppColors.primaryColor),
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.arrow_forward),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CheckoutWidget(
-                    carInsurancePlan: widget.carInsurancePlan,
-                  ),
-                ),
-              );
-            },
-            tooltip: 'Skip to checkout',
+          style: TextStyle(
+            color: AppColors.primaryColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
           ),
-        ],
+        ),
       ),
       body: FutureBuilder<List<Offer>>(
-        future: fetchOffers(),
+        future: futureOffers,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -60,15 +52,13 @@ class _OfferListWidgetState extends State<OfferListWidget> {
             return const Center(child: Text("No offers available"));
           } else {
             List<Offer> offers = snapshot.data!;
-            return ListView.separated(
+            return ListView.builder(
               padding: const EdgeInsets.all(16.0),
-              itemCount: offers.length + 1, // Add one for the extra offer card
+              itemCount: offers.length + 1,
               itemBuilder: (context, index) {
                 if (index == offers.length) {
-                  // Render the extra offer card
                   return InkWell(
                     onTap: () {
-                      // Placeholder action for the extra offer card
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Tapped on extra offer')),
                       );
@@ -76,9 +66,9 @@ class _OfferListWidgetState extends State<OfferListWidget> {
                     child: Card(
                       margin: const EdgeInsets.symmetric(vertical: 8),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0),
+                        borderRadius: BorderRadius.circular(16.0),
                       ),
-                      elevation: 4,
+                      elevation: 6,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Center(
@@ -87,7 +77,7 @@ class _OfferListWidgetState extends State<OfferListWidget> {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.blue,
+                              color: AppColors.primaryColor,
                             ),
                           ),
                         ),
@@ -95,65 +85,138 @@ class _OfferListWidgetState extends State<OfferListWidget> {
                     ),
                   );
                 }
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => CheckoutWidget(
-                          carInsurancePlan: widget.carInsurancePlan,
-                          offer: offers[index],
+                final offer = offers[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 12.0),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  elevation: 6,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: Text(
+                        offer.name,
+                        style: TextStyle(
+                          fontSize: 22.0,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    );
-                  },
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            offers[index].name,
-                            style: AppTextStyles.bodyTextStyle1.copyWith(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                      subtitle: Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Price:',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                color: Colors.black54,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          AnimatedDefaultTextStyle(
-                            duration: const Duration(milliseconds: 500),
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.red[800], // Bright red for visibility
-                              fontWeight: FontWeight.bold,
+                            SizedBox(height: 4.0),
+                            Text(
+                              '${offer.price} €',
+                              style: TextStyle(
+                                fontSize: 26.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
                             ),
-                            child: Text('Price: \$${offers[index].price}'),
-                          ),
-                          const SizedBox(height: 10),
-                          ...offers[index].attributes.map((attribute) => Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: Text(
-                              "${attribute.title}: ${attribute.description}",
-                              style: AppTextStyles.bodyTextStyle1,
+                            SizedBox(height: 12.0),
+                            ElevatedButton(
+                              onPressed: () {
+                                _showBottomSheet(context, offer);
+                              },
+                              child: Text('Show Details'),
                             ),
-                          )),
-                        ],
+                          ],
+                        ),
                       ),
+                      trailing: Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.blue,
+                        size: 28,
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CheckoutWidget(
+                              carInsurancePlan: widget.carInsurancePlan,
+                              offer: offer,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 );
               },
-              separatorBuilder: (context, index) => const Divider(),
             );
           }
         },
       ),
     );
+  }
+
+  void _showBottomSheet(BuildContext context, Offer offer) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            children: [
+              Text(
+                'Details for ${offer.name}',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 16.0),
+              ..._buildOfferDetails(offer),
+              SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Close'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  List<Widget> _buildOfferDetails(Offer offer) {
+    return offer.attributes.map((attribute) => Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              '${attribute.title}:',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Flexible(
+            child: Text(
+              attribute.description.isEmpty ? 'Details set later' : attribute.description,
+              style: TextStyle(
+                fontSize: 18.0,
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ],
+      ),
+    )).toList();
   }
 }

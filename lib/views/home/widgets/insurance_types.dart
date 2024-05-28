@@ -3,48 +3,55 @@ import 'package:flutter/material.dart';
 class InsurranceTypeWidget extends StatelessWidget {
   final String image_url;
   final String title;
+  final String description;
   final VoidCallback onclick;
-  const InsurranceTypeWidget(
-      {super.key,
-      required this.image_url,
-      required this.title,
-      required this.onclick});
+
+  const InsurranceTypeWidget({
+    required this.image_url,
+    required this.title,
+    required this.description,
+    required this.onclick,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 12),
-      child: GestureDetector(
-        onTap: onclick,
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  image_url,
-                  width: double.infinity,
-                  height: 230,
-                  fit: BoxFit.contain,
-                ),
-              ),
+    return GestureDetector(
+      onTap: onclick,
+      child: Container(
+        padding: const EdgeInsets.all(16.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 4,
+              blurRadius: 7,
+              offset: Offset(0, 3), // changes position of shadow
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(16, 0, 16, 4),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ],
+        ),
+        child: Row(
+          children: [
+            Image.asset(image_url, width: 80, height: 80),
+            SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      fontFamily: 'Readex Pro',
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 0,
-                    ),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
+                        ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    description,
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontSize: 16,
+                        ),
                   ),
                 ],
               ),
