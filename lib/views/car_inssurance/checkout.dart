@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/model/car_plan.dart';
 import 'package:insurrance/src/model/offer.dart';
+import 'package:insurrance/views/car/checkout/devis_form.dart';
 
 class CheckoutWidget extends StatefulWidget {
   final CarInsurancePlan carInsurancePlan;
@@ -38,21 +39,20 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        
-         title: const Text(
+        title: const Text(
           'Checkout !',
-          style: TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: AppColors.primaryColor, fontWeight: FontWeight.bold),
         ),
         automaticallyImplyLeading: false,
         leading: IconButton(
-
           icon: const Icon(
             Icons.arrow_back_rounded,
             color: Colors.black,
             size: 25,
           ),
           onPressed: () async {
-            Navigator.pop(context); 
+            Navigator.pop(context);
           },
         ),
         actions: [],
@@ -328,7 +328,13 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                print('Button pressed ...');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => DevisForm(
+                                            tarif: total.toInt(),
+                                          )),
+                                );
                               },
                               child: Text('Continue to Checkout'),
                               style: ElevatedButton.styleFrom(

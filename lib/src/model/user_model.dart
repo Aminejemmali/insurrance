@@ -40,4 +40,19 @@ class UserModel {
       postalCode: data['postalCode'],
     );
   }
+
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      uid: json['id'],
+      firstName: json['prenom'],
+      lastName: json['nom'],
+      emailAddress: json['email'],
+      isActive: true,
+      createdAt: Timestamp.fromDate(DateTime.parse(json['created_at'])),
+      updatedAt: Timestamp.fromDate(DateTime.parse(json['updated_at'])),
+      phoneNumber: json['num_tel'],
+      address: json['adresse'],
+      postalCode: json['code_postale'],
+    );
+  }
 }

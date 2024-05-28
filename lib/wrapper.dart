@@ -1,14 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:insurrance/src/api/user/get_user.dart';
+import 'package:insurrance/src/model/user_model.dart';
+import 'package:insurrance/src/providers/user_provideer.dart';
 import 'package:insurrance/views/auth/main_auth_scree.dart';
 import 'package:insurrance/views/home/index_home.dart';
+import 'package:provider/provider.dart';
 
-
-
-class Wrapper extends StatelessWidget {
+class Wrapper extends StatefulWidget {
   const Wrapper({Key? key}) : super(key: key);
 
- 
+  @override
+  State<Wrapper> createState() => _WrapperState();
+}
+
+class _WrapperState extends State<Wrapper> {
+  Future<void> _fetchData() async {
+  
+    if (FirebaseAuth.instance.currentUser != null) {
+      UserModel? userModel =
+          await fetchUserData(FirebaseAuth.instance.currentUser!.uid);
+      if (userModel != null && mounted) {
+        Provider.of<UserProvider>(context, listen: false).setUser(userModel);
+      
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +46,11 @@ class Wrapper extends StatelessWidget {
             // Return home
             return HomeScreen();
           } else {
-            // Show auth or login screen
+            // Show auth
             return MainAuth();
           }
         } else {
-          // Show loading indicator or another placeholder widget
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
       },
     );

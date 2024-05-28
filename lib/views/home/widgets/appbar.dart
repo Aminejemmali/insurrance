@@ -1,30 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:insurrance/src/config/app_colors.dart';
+import 'package:insurrance/src/model/user_model.dart';
 import 'package:insurrance/src/services/authentication/auth_firebase.dart';
+import 'package:insurrance/views/user_profile/user_profile.dart';
 import 'package:resize/resize.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+  final UserModel userModel;
   const AppBarWidget({
-    Key? key,
+    Key? key, required this.userModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      // leading: InkWell(
-      //   onTap: (){},
-      //   child: Image.asset(
-      //     'assets/icons/user-avatar.png',
-      //     scale: 1.5.h,
-      //   ),
-      // ),
+      leading: GestureDetector(
+        onTap: () {
+          UserAuth().signOut(context);
+        },
+        child: Image.asset(
+          'assets/icons/user-avatar.png',
+          scale: 1.5.h,
+        ),
+      ),
       actions: <Widget>[
         Row(
           children: [
             InkWell(
               onTap: () {
-                UserAuth().signOut(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => UserProfileScreen(userModel: userModel,)),
+                );
               },
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(12, 0, 16, 0),

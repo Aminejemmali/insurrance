@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:insurrance/src/api/signup.dart';
+import 'package:insurrance/src/api/user/signup.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/config/app_text_style.dart';
 import 'package:insurrance/src/controllers/signup_controller.dart';
