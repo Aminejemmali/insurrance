@@ -4,6 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:insurrance/src/api/car_inssurance/create_devis.dart';
 import 'package:insurrance/src/providers/user_provideer.dart';
 import 'package:insurrance/src/services/authentication/stripe/payment_service.dart';
@@ -35,6 +37,8 @@ class _DevisFormState extends State<DevisForm> {
   final _dateFormat = DateFormat('yyyy-MM-dd');
 
   bool loading = false;
+
+
   Future<String?> uploadPDF() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
@@ -210,6 +214,9 @@ class _DevisFormState extends State<DevisForm> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text('Devis Created Successfully')),
                       );
+
+                     
+          
                     }
                   },
                   child: Text('Pay'),
