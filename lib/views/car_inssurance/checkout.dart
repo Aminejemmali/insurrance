@@ -338,7 +338,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
 
                                 await Navigator.push(context ,MaterialPageRoute(
                                     builder: (context) =>
-                                        StripePayment()));
+                                        PaymentSheetDefferedScreen()));
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

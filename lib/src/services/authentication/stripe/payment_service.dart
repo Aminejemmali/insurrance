@@ -1,93 +1,71 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 
-
 class PaymentSheetDefferedScreen extends StatefulWidget {
   @override
-  _PaymentSheetScreenState createState() => _PaymentSheetScreenState();
+  _PaymentSheetDefferedScreenState createState() => _PaymentSheetDefferedScreenState();
 }
 
-class _PaymentSheetScreenState extends State<PaymentSheetDefferedScreen> {
+class _PaymentSheetDefferedScreenState extends State<PaymentSheetDefferedScreen> {
   int step = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-      children: [
-
-      ],
+      appBar: AppBar(
+        title: Text('Stripe Payment '),
+      ),
+      body: Center(
+        child: step == 0
+            ? ElevatedButton(
+          onPressed: initPaymentSheet,
+          child: Text('Initialize Payment Sheet'),
+        )
+            : ElevatedButton(
+          onPressed: confirmPayment,
+          child: Text('Confirm Payment'),
+        ),
+      ),
     );
   }
 
-  Future<void> _createIntentAndConfirmToUser(String paymentMethodId) async {
-    final url = Uri.parse('/payment-intent-for-payment-sheet');
-    final response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'paymentMethodId': paymentMethodId,
-      }),
-    );
-    final body = json.decode(response.body);
-    if (body['error'] != null) {
-      throw Exception(body['error']);
-    }
-
-
-    await Stripe.instance.intentCreationCallback(
-        IntentCreationCallbackParams(clientSecret: body['clientSecret']));
-  }
 
   Future<void> initPaymentSheet() async {
     try {
-      // // 1. create payment intent on the server
-      // final data = await _createTestPaymentSheet();
-
-      // create some billingdetails
+      // Create some billing details
       final billingDetails = BillingDetails(
         name: 'Flutter Stripe',
         email: 'email@stripe.com',
         phone: '+48888000888',
         address: Address(
           city: 'Houston',
-          country: 'US',
-          line1: '1459  Circle Drive',
+          country: 'FR',
+          line1: '1459 Circle Drive',
           line2: '',
           state: 'Texas',
           postalCode: '77063',
         ),
-      ); // mocked data for tests
+      );
 
-      // 2. initialize the payment sheet
+      // Initialize the payment sheet
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-          // Main params
           merchantDisplayName: 'Flutter Stripe Store Demo',
           intentConfiguration: IntentConfiguration(
-              mode: IntentMode(
-                currencyCode: 'USD',
-                amount: 1500,
-              ),
-              confirmHandler: (method, saveFuture) {
-                _createIntentAndConfirmToUser(method.id);
-              }),
-
-          // Extra params
-          primaryButtonLabel: 'Pay now',
-          applePay: PaymentSheetApplePay(
-            merchantCountryCode: 'DE',
+            mode: IntentMode(
+              currencyCode: 'USD',
+              amount: 1500,
+            ),
+            /*  confirmHandler: (method, saveFuture) {
+              _createIntentAndConfirmToUser(method.id);
+            },*/
           ),
+          primaryButtonLabel: 'Pay now',
           googlePay: PaymentSheetGooglePay(
             merchantCountryCode: 'DE',
             testEnv: true,
           ),
-
           style: ThemeMode.dark,
           appearance: PaymentSheetAppearance(
             colors: PaymentSheetAppearanceColors(
@@ -124,34 +102,44 @@ class _PaymentSheetScreenState extends State<PaymentSheetDefferedScreen> {
     }
   }
 
+
   Future<void> confirmPayment() async {
     try {
-      // 3. display the payment sheet.
-      await Stripe.instance.presentPaymentSheet();
-
-      setState(() {
-        step = 0;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Payment succesfully completed'),
-        ),
-      );
-    } on Exception catch (e) {
-      if (e is StripeException) {
+      // Assuming you have a Stripe instance configured
+      // (and potentially using stripe_platform for Stripe 10+)
+      final paymentResult = await Stripe.instance.presentPaymentSheet();
+/*
+      if (paymentResult.isCompleted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error from Stripe: ${e.error.localizedMessage}'),
+            content: Text('Payment successfully completed.'),
           ),
         );
       } else {
+        // Handle other statuses like canceled or failed
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Unforeseen error: ${e}'),
+            content: Text('Payment not completed. Status: ${paymentResult?.status}'),
           ),
         );
       }
+*/
+      setState(() {
+        step = 0;  // Reset the payment step
+      });
+    } on StripeException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error from Stripe: ${e.error.localizedMessage}'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Unforeseen error: $e'),
+        ),
+      );
     }
   }
+
 }
