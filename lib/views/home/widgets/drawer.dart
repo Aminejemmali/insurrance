@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/model/user_model.dart';
 import 'package:insurrance/src/services/authentication/auth_firebase.dart';
+import 'package:insurrance/views/devis/devis_list.dart';
 import 'package:insurrance/views/user_profile/user_profile.dart';
 import 'package:resize/resize.dart';
 
-class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
+class DrawerWidget extends StatelessWidget implements PreferredSizeWidget {
   final UserModel userModel;
-  const AppBarWidget({
-    Key? key, required this.userModel,
+  const DrawerWidget({
+    Key? key,
+    required this.userModel,
   }) : super(key: key);
 
   @override
@@ -16,7 +18,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return Drawer(
       child: Column(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
               color: Colors.blue,
             ),
@@ -31,17 +33,20 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
           ListTile(
-            leading: Icon(Icons.business),
-            title: Text('Mes Devsies'),
+            leading: const Icon(Icons.business),
+            title: const Text('Mes Devsies'),
             onTap: () {
-             // Navigator.of(context).pushNamed('/services');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DevisList()),
+              );
             },
           ),
           ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Paramètres'),
+            leading: const Icon(Icons.settings),
+            title: const Text('Paramètres'),
             onTap: () {
-             // Navigator.of(context).pushNamed('/settings');
+              // Navigator.of(context).pushNamed('/settings');
             },
           ),
           Spacer(), // Pushes the user information and logout to the bottom
@@ -53,7 +58,10 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => UserProfileScreen(userModel: userModel,)),
+                MaterialPageRoute(
+                    builder: (context) => UserProfileScreen(
+                          userModel: userModel,
+                        )),
               );
             },
           ),

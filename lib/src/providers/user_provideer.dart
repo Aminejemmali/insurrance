@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:insurrance/src/model/user_model.dart'; // Adjust the path as needed
+import 'package:insurrance/src/model/user_model.dart'; 
 
 class UserProvider with ChangeNotifier {
   UserModel _user = UserModel(
       uid: "uid",
-      firstName: "firstName",
-      lastName: "lastName",
+      firstName: "loading",
+      lastName: "loading",
       emailAddress: "emailAddress",
       isActive: true,
       createdAt: Timestamp.now(),

@@ -42,7 +42,7 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
             children: <Widget>[
               ListView(
                 children: <Widget>[
-                //  Text(widget.idtype.toString()),
+                  //  Text(widget.idtype.toString()),
                   buildTextFormField(
                     controller: _typeLogementController,
                     label: 'Type de Logement',
@@ -126,7 +126,7 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
                           typeLogement: _typeLogementController.text,
                           adresseLogement: _adresseLogementController.text,
                           dateConstruction: _dateConstructionController.text,
-                          surface: double.parse(_surfaceController.text),
+                          surface: _surfaceController.text,
                           nbPieces: int.parse(_nbPiecesController.text),
                           dependances: _dependancesController.text,
                           veranda: _veranda,
@@ -143,7 +143,8 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
 
                         print(habitationDevis.toJson());
 
-                        bool sent = await submitHabitationDevis(habitationDevis, context);
+                        bool sent = await submitHabitationDevis(
+                            habitationDevis, context);
 
                         setState(() {
                           loading = false;

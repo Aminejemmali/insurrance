@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:insurrance/src/api/user/get_user.dart';
 import 'package:insurrance/src/model/user_model.dart';
 import 'package:insurrance/src/providers/user_provideer.dart';
-import 'package:insurrance/views/home/widgets/appbar.dart';
+import 'package:insurrance/views/home/widgets/drawer.dart';
 import 'package:insurrance/views/home/widgets/banner_slider.dart';
 import 'package:insurrance/views/car_inssurance/car_insurrance_list.dart';
 import 'package:insurrance/views/home/widgets/insurance_types.dart';
@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     
     return Scaffold(
       appBar: AppBar(),
-      drawer: AppBarWidget(userModel: userProvider.user!),
+      drawer: DrawerWidget(userModel: userProvider.user!),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

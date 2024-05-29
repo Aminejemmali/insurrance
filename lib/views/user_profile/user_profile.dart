@@ -4,6 +4,7 @@ import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/config/app_text_style.dart';
 import 'package:insurrance/src/controllers/general_controller.dart';
 import 'package:insurrance/src/model/user_model.dart';
+import 'package:insurrance/src/providers/user_provideer.dart';
 import 'package:insurrance/src/widgets/button_widget.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:provider/provider.dart';

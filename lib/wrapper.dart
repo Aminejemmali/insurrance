@@ -16,13 +16,12 @@ class Wrapper extends StatefulWidget {
 
 class _WrapperState extends State<Wrapper> {
   Future<void> _fetchData() async {
-  
     if (FirebaseAuth.instance.currentUser != null) {
       UserModel? userModel =
           await fetchUserData(FirebaseAuth.instance.currentUser!.uid);
       if (userModel != null && mounted) {
         Provider.of<UserProvider>(context, listen: false).setUser(userModel);
-      
+        print("object");
       }
     }
   }

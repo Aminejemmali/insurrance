@@ -9,7 +9,7 @@ class HabitationDevis {
   final String typeLogement;
   final String adresseLogement;
   final String dateConstruction;
-  final double surface;
+  final String surface;
   final int nbPieces;
   final String dependances;
   final bool veranda;
@@ -32,7 +32,7 @@ class HabitationDevis {
     required this.nbPieces,
     required this.dependances,
     required this.veranda,
-   // required this.offreId,
+    // required this.offreId,
     required this.typeId,
     required this.clientId,
   });
@@ -50,10 +50,10 @@ class HabitationDevis {
       adresseLogement: json['adresse_logement'],
       dateConstruction: json['date_construcion'],
       surface: json['surface'],
-      nbPieces: json['nb_pieces'],
+      nbPieces: int.parse(json['nb_pieces']),
       dependances: json['dependances'],
       veranda: json['veranda'],
-     // offreId: json['offre_id'],
+      // offreId: json['offre_id'],
       typeId: json['type_id'],
       clientId: json['client_id'],
     );
