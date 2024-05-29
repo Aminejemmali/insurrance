@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 //import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:insurrance/firebase_options.dart';
 import 'package:insurrance/src/controllers/edit_user_controller.dart';
@@ -14,8 +16,9 @@ import 'package:resize/resize.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-//  Stripe.publishableKey =
-    //  "pk_test_51PLL1aC0rf2kX0Czo7jvXnrwVuDlSwxxFfu8LQ5ykOFfuxfHHWM1uNmc0NG2xFk4Ig2Q3rkqijSC3RJhuffYvF7P00RESBC2EF";
+ Stripe.publishableKey =
+     "pk_test_51PLBXs16z6gacqHS8YIaoAcw22zFTbiEhwWP9Q1U31uJnzr1wpq0rLwNgV921psZG9e3SRjXimxEadlhnkbFIDjX00i1mKPKMz";
+ await dotenv.load(fileName:"assets/.env");
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
