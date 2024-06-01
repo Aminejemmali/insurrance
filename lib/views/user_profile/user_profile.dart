@@ -66,7 +66,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             child: Scaffold(
               backgroundColor: AppColors.white,
               appBar: AppBar(
-                title: Text(widget.userModel.firstName),
+                centerTitle: true,
+                title: const Text("Your Profile"),
               ),
               body: SingleChildScrollView(
                 child: Padding(
@@ -74,57 +75,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          gradient: AppColors.gradientOne,
-                        ),
-                        child: Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                imagePickerDialog(context);
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(20),
-                                decoration: BoxDecoration(
-                                  color: AppColors.offWhite,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border:
-                                      Border.all(color: AppColors.primaryColor),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Image.asset(
-                                        "assets/icons/Upload_duotone_line.png"),
-                                    const SizedBox(height: 4),
-                                    const Text(
-                                      "Upload image",
-                                      style: AppTextStyles.bodyTextStyle1,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 16),
-                            const Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "",
-                                  style: AppTextStyles.bodyTextStyle5,
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  "",
-                                  style: AppTextStyles.bodyTextStyle6,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
                       const SizedBox(height: 18),
                       TextField(
                         controller: _firstNameController,
@@ -181,38 +131,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
           ),
-        );
-      },
-    );
-  }
-
-  void imagePickerDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          actions: <Widget>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                //  camera option
-              },
-              child: Text(
-                'Camera',
-                style: AppTextStyles.buttonTextStyle8,
-              ),
-            ),
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              onPressed: () {
-                // gallery option
-              },
-              child: Text(
-                'Gallery',
-                style: AppTextStyles.buttonTextStyle8,
-              ),
-            ),
-          ],
         );
       },
     );

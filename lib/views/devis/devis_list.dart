@@ -16,6 +16,9 @@ class _DevisListState extends State<DevisList> {
   List<HabitationDevis> habitationDevisList = [];
   List<CarDevis> carDevisList = [];
   bool isLoading = true;
+  int _selectedIndex = 0;
+  late PageController _pageController;
+
   Future<void> loadDevis() async {
     try {
       final data = await fetchDevis(FirebaseAuth.instance.currentUser!.uid);
@@ -35,30 +38,68 @@ class _DevisListState extends State<DevisList> {
   @override
   void initState() {
     super.initState();
+    _pageController = PageController();
     loadDevis();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    _pageController.jumpToPage(index);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Devis List'),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : ListView.separated(
-              itemBuilder: (context, index) {
-                if (index < habitationDevisList.length) {
-                  return buildHabitationDevisCard(habitationDevisList[index]);
-                } else {
-                  final carIndex = index - habitationDevisList.length;
-                  return buildCarDevisCard(carDevisList[carIndex]);
-                }
+          ? const Center(child: CircularProgressIndicator())
+          : PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _selectedIndex = index;
+                });
               },
-              separatorBuilder: (context, index) =>
-                  Divider(), 
-              itemCount: habitationDevisList.length + carDevisList.length,
+              children: [
+                ListView.builder(
+                  itemCount: habitationDevisList.length,
+                  itemBuilder: (context, index) {
+                    return buildHabitationDevisCard(habitationDevisList[index]);
+                  },
+                ),
+                ListView.builder(
+                  itemCount: carDevisList.length,
+                  itemBuilder: (context, index) {
+                    return buildCarDevisCard(carDevisList[index]);
+                  },
+                ),
+              ],
             ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Habitation Devis',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.directions_car),
+            label: 'Car Devis',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
     );
   }
 }
