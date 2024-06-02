@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:insurrance/src/api/user/update_user.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/config/app_text_style.dart';
 import 'package:insurrance/src/controllers/general_controller.dart';
@@ -20,42 +21,44 @@ class UserProfileScreen extends StatefulWidget {
 class _UserProfileScreenState extends State<UserProfileScreen> {
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _postalCodeController = TextEditingController();
 
   final TextEditingController _addressLine1Controller = TextEditingController();
-  final TextEditingController _zipCodeController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _firstNameController.text = widget.userModel.firstName;
     _lastNameController.text = widget.userModel.lastName;
-    _userNameController.text = widget.userModel.emailAddress;
+    _postalCodeController.text = widget.userModel.postalCode ?? "";
 
     _addressLine1Controller.text = widget.userModel.address ?? '';
-    _zipCodeController.text = widget.userModel.postalCode ?? '';
+    _phoneNumberController.text = widget.userModel.postalCode ?? '';
   }
 
   @override
   void dispose() {
     _firstNameController.dispose();
     _lastNameController.dispose();
-    _userNameController.dispose();
+    _postalCodeController.dispose();
 
     _addressLine1Controller.dispose();
-    _zipCodeController.dispose();
+    _phoneNumberController.dispose();
     super.dispose();
   }
 
+  bool load = false;
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Consumer<GeneralController>(
       builder: (context, generalController, child) {
         return ModalProgressHUD(
           progressIndicator: const CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryColor),
           ),
-          inAsyncCall: generalController.formLoaderController,
+          inAsyncCall: load,
           child: GestureDetector(
             onTap: () {
               final FocusScopeNode currentFocus = FocusScope.of(context);
@@ -93,9 +96,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       const SizedBox(height: 14),
                       TextField(
-                        controller: _userNameController,
+                        controller: _postalCodeController,
                         decoration: const InputDecoration(
-                          hintText: '* User Name',
+                          hintText: '* Postal code',
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -109,16 +112,36 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       const SizedBox(height: 14),
                       TextField(
-                        controller: _zipCodeController,
+                        controller: _phoneNumberController,
                         decoration: const InputDecoration(
-                          hintText: '* Zip Code',
+                          hintText: 'Phone Number',
                           border: OutlineInputBorder(),
                         ),
                       ),
                       const SizedBox(height: 24),
                       ButtonWidgetOne(
-                        onTap: () {
-                          // Handle button tap
+                        onTap: () async {
+                          if (_firstNameController.text.isEmpty ||
+                              _lastNameController.text.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text("Name is required")));
+                            return;
+                          }
+                          setState(() {
+                            load = !load;
+                          });
+                          UserModel userModel = widget.userModel;
+                          userModel.firstName = _firstNameController.text;
+                          userModel.lastName = _lastNameController.text;
+                          userModel.address = _addressLine1Controller.text;
+                          userModel.phoneNumber = _phoneNumberController.text;
+                          userModel.postalCode = _postalCodeController.text;
+                          await updateUserData(userModel);
+                          userProvider.setUser(userModel);
+                          setState(() {
+                            load = !load;
+                          });
                         },
                         buttonText: "Save Profile",
                         buttonTextStyle: AppTextStyles.bodyTextStyle8,

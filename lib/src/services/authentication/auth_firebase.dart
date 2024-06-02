@@ -11,7 +11,7 @@ class AuthResult {
 
 class UserAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  String errorMessage = "Authentication failed";
   Future<AuthResult> signInWithEmailAndPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -21,9 +21,12 @@ class UserAuth {
       );
       return AuthResult(user: userCredential.user, errorMessage: null);
     } catch (e) {
-      print('Error signing in: $e');
-      _showErrorSnackbar(context, 'Sign in failed: $e');
-      return AuthResult(user: null, errorMessage: e.toString());
+      if (e is FirebaseAuthException) {
+        errorMessage = getErrorMessage(e.code);
+      }
+      // print('Error signing in: $e');
+      // _showErrorSnackbar(context, 'Sign in failed: $e');
+      return AuthResult(user: null, errorMessage: errorMessage);
     }
   }
 
@@ -37,9 +40,12 @@ class UserAuth {
       );
       return AuthResult(user: userCredential.user, errorMessage: null);
     } catch (e) {
-      print('Error signing up: $e');
-      _showErrorSnackbar(context, 'Sign up failed: $e');
-      return AuthResult(user: null, errorMessage: e.toString());
+      if (e is FirebaseAuthException) {
+        errorMessage = getErrorMessage(e.code);
+      }
+      // print('Error signing up: $e');
+      // _showErrorSnackbar(context, 'Sign up failed: $e');
+      return AuthResult(user: null, errorMessage: errorMessage);
     }
   }
 
@@ -61,7 +67,7 @@ class UserAuth {
                     MaterialPageRoute(builder: (context) => MainAuth()),
                   );
                 } catch (e) {
-                  print('Error signing out: $e');
+                  //print('Error signing out: $e');
                   _showErrorSnackbar(context, 'Sign out failed: $e');
                 }
               },
@@ -84,5 +90,28 @@ class UserAuth {
       content: Text(message),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+}
+
+String getErrorMessage(String errorCode) {
+  switch (errorCode) {
+    case 'invalid-login-credentials':
+      return 'Invalid password or Email';
+    case 'wrong-password':
+      return 'Invalid password. Please check your password and try again.';
+    case 'invalid-email':
+      return 'Invalid email address. Please provide a valid email.';
+    case 'user-disabled':
+      return 'Your account has been disabled. Please contact support.';
+    case 'user-not-found':
+      return 'User not found. Please check your email or sign up for an account.';
+    case 'email-already-in-use':
+      return 'An account with this email already exists. Please use a different email address.';
+    case 'operation-not-allowed':
+      return 'Email/password accounts are not enabled. Please contact support.';
+    case 'weak-password':
+      return 'The password is not strong enough. Please choose a stronger password.';
+    default:
+      return 'An unknown error occurred. Please try again later.';
   }
 }

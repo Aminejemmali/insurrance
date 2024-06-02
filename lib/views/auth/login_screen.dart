@@ -52,21 +52,6 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  String _mapFirebaseErrorToFriendlyMessage(String error) {
-    switch (error) {
-      case 'user-not-found':
-        return 'No user found with this email.';
-      case 'wrong-password':
-        return 'Incorrect password. Please try again.';
-      case 'network-request-failed':
-        return 'Network error. Please check your connection.';
-      case 'too-many-requests':
-        return 'Too many attempts. Please try again later.';
-      default:
-        return 'An unexpected error occurred. Please try again.';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Consumer<GeneralController>(
@@ -205,10 +190,9 @@ class _SignInScreenState extends State<SignInScreen> {
                                                   HomeScreen()),
                                         );
                                       } else {
-                                        _showErrorDialog(
-                                            _mapFirebaseErrorToFriendlyMessage(
-                                                authResult.errorMessage ??
-                                                    'An unexpected error occurred.'));
+                                        _showErrorDialog(authResult
+                                                .errorMessage ??
+                                            'An unexpected error occurred.');
                                       }
                                     } catch (e) {
                                       _showErrorDialog(

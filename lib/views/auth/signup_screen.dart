@@ -48,8 +48,11 @@ class _SignupScreenState extends State<SignupScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset("assets/images/sk.png" ,width: 300,height: 200,),
-                     
+                      Image.asset(
+                        "assets/images/sk.png",
+                        width: 300,
+                        height: 200,
+                      ),
                       const Text(
                         "Create an Account",
                         style: AppTextStyles.bodyTextStyle8,
@@ -292,7 +295,8 @@ class _SignupScreenState extends State<SignupScreen> {
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                      content: Text(authResult.errorMessage!)));
+                                      content: Text(authResult.errorMessage ??
+                                          'An unexpected error occurred.')));
                             }
                           }
                           setState(() {

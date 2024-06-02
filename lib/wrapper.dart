@@ -8,7 +8,7 @@ import 'package:insurrance/views/home/index_home.dart';
 import 'package:provider/provider.dart';
 
 class Wrapper extends StatefulWidget {
-  const Wrapper({Key? key}) : super(key: key);
+  const Wrapper({super.key});
 
   @override
   State<Wrapper> createState() => _WrapperState();
@@ -21,7 +21,7 @@ class _WrapperState extends State<Wrapper> {
           await fetchUserData(FirebaseAuth.instance.currentUser!.uid);
       if (userModel != null && mounted) {
         Provider.of<UserProvider>(context, listen: false).setUser(userModel);
-        print("object");
+        print("loaded user");
       }
     }
   }
@@ -43,10 +43,10 @@ class _WrapperState extends State<Wrapper> {
           // Ensure the user is logged in
           if (user != null) {
             // Return home
-            return HomeScreen();
+            return const HomeScreen();
           } else {
             // Show auth
-            return MainAuth();
+            return const MainAuth();
           }
         } else {
           return Center(child: CircularProgressIndicator());
