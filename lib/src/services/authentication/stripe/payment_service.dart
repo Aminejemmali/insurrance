@@ -1,145 +1,174 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
+import 'package:insurrance/api.dart';
+import 'package:insurrance/views/devis/devis_list.dart';
+import 'package:lottie/lottie.dart';
 
-class PaymentSheetDefferedScreen extends StatefulWidget {
+class StripePayment extends StatefulWidget {
+  final int id;
+  final String type;
+  final int amount;
+
+  StripePayment({super.key, required this.id, required this.type, required this.amount});
+
   @override
-  _PaymentSheetDefferedScreenState createState() => _PaymentSheetDefferedScreenState();
+  _StripePaymentState createState() => _StripePaymentState();
 }
 
-class _PaymentSheetDefferedScreenState extends State<PaymentSheetDefferedScreen> {
-  int step = 0;
+class _StripePaymentState extends State<StripePayment> {
+  bool _isLoading = true;
+  bool _isSuccess = false;
+  bool _isError = false;
+
+  @override
+  void initState() {
+    super.initState();
+    startPayment(context);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stripe Payment '),
+        title: Text('Stripe Payment'),
       ),
-      body: Center(
-        child: step == 0
-            ? ElevatedButton(
-          onPressed: initPaymentSheet,
-          child: Text('Initialize Payment Sheet'),
-        )
-            : ElevatedButton(
-          onPressed: confirmPayment,
-          child: Text('Confirm Payment'),
-        ),
+      body: Stack(
+        children: [
+          if (_isLoading)
+            _buildLoadingAnimation(),
+          if (_isSuccess)
+            _buildSuccessAnimation(),
+          if (_isError)
+            _buildFailureAnimation(),
+        ],
       ),
     );
   }
 
+  Widget _buildLoadingAnimation() {
+    return Container(
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
+        child: Lottie.asset('assets/animations/loading.json', width: 400, height: 400),
+      ),
+    );
+  }
 
-  Future<void> initPaymentSheet() async {
+  Widget _buildSuccessAnimation() {
+    return Container(
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
+        child: Lottie.asset('assets/animations/success.json', width: 200, height: 200),
+      ),
+    );
+  }
+
+  Widget _buildFailureAnimation() {
+    return Container(
+      color: Colors.black.withOpacity(0.5),
+      child: Center(
+        child: Lottie.asset('assets/animations/failure.json', width: 200, height: 200),
+      ),
+    );
+  }
+
+  void startPayment(BuildContext context) async {
+    setState(() {
+      _isLoading = true;
+      _isSuccess = false;
+      _isError = false;
+    });
+
     try {
-      // Create some billing details
-      final billingDetails = BillingDetails(
-        name: 'Flutter Stripe',
-        email: 'email@stripe.com',
-        phone: '+48888000888',
-        address: Address(
-          city: 'Houston',
-          country: 'FR',
-          line1: '1459 Circle Drive',
-          line2: '',
-          state: 'Texas',
-          postalCode: '77063',
-        ),
-      );
+      // Get the clientSecret from your server
+      String? clientSecret = await getClientSecretFromServer();
 
-      // Initialize the payment sheet
+      // Configure the PaymentSheet with the clientSecret
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-          merchantDisplayName: 'Flutter Stripe Store Demo',
-          intentConfiguration: IntentConfiguration(
-            mode: IntentMode(
-              currencyCode: 'USD',
-              amount: 1500,
-            ),
-            /*  confirmHandler: (method, saveFuture) {
-              _createIntentAndConfirmToUser(method.id);
-            },*/
-          ),
-          primaryButtonLabel: 'Pay now',
-          googlePay: PaymentSheetGooglePay(
-            merchantCountryCode: 'DE',
-            testEnv: true,
-          ),
-          style: ThemeMode.dark,
-          appearance: PaymentSheetAppearance(
-            colors: PaymentSheetAppearanceColors(
-              background: Colors.lightBlue,
-              primary: Colors.blue,
-              componentBorder: Colors.red,
-            ),
-            shapes: PaymentSheetShape(
-              borderWidth: 4,
-              shadow: PaymentSheetShadowParams(color: Colors.red),
-            ),
-            primaryButton: PaymentSheetPrimaryButtonAppearance(
-              shapes: PaymentSheetPrimaryButtonShape(blurRadius: 8),
-              colors: PaymentSheetPrimaryButtonTheme(
-                light: PaymentSheetPrimaryButtonThemeColors(
-                  background: Color.fromARGB(255, 231, 235, 30),
-                  text: Color.fromARGB(255, 235, 92, 30),
-                  border: Color.fromARGB(255, 235, 92, 30),
-                ),
-              ),
-            ),
-          ),
-          billingDetails: billingDetails,
+          paymentIntentClientSecret: clientSecret,
+          merchantDisplayName: 'SK Assurance',
         ),
       );
+
+      // Display the PaymentSheet
+      await Stripe.instance.presentPaymentSheet();
+      await updatePaymentStatus(widget.type);
+
       setState(() {
-        step = 1;
+        _isLoading = false;
+        _isSuccess = true;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Payment completed!')));
+
+      // Delay for 5 seconds before navigating
+      Future.delayed(Duration(seconds: 5), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DevisList(),
+          ),
+        );
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error: $e')),
-      );
-      rethrow;
+      setState(() {
+        _isLoading = false;
+        _isError = true;
+      });
+      handlePaymentError(e);
     }
   }
 
-
-  Future<void> confirmPayment() async {
-    try {
-      // Assuming you have a Stripe instance configured
-      // (and potentially using stripe_platform for Stripe 10+)
-      final paymentResult = await Stripe.instance.presentPaymentSheet();
-/*
-      if (paymentResult.isCompleted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Payment successfully completed.'),
-          ),
-        );
-      } else {
-        // Handle other statuses like canceled or failed
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Payment not completed. Status: ${paymentResult?.status}'),
-          ),
-        );
-      }
-*/
-      setState(() {
-        step = 0;  // Reset the payment step
-      });
-    } on StripeException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Error from Stripe: ${e.error.localizedMessage}'),
-        ),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Unforeseen error: $e'),
-        ),
-      );
+  void handlePaymentError(Object e) {
+    if (e is StripeException) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error from Stripe: ${e.error.localizedMessage}')));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Unforeseen error: ${e.toString()}')));
     }
   }
 
+  Future<String?> getClientSecretFromServer() async {
+    final url = Uri.parse('$base_url/api/create-payment-intent');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer your_token', // Replace with your token if your API requires authentication
+      },
+      body: jsonEncode({
+        'amount': widget.amount * 100, // Replace with the desired amount
+        'currency': 'eur', // Replace with the desired currency
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      return jsonResponse['clientSecret'];
+    } else {
+      throw Exception('Failed to load client secret');
+    }
+  }
+
+  Future<void> updatePaymentStatus(String type) async {
+    final url = Uri.parse('$base_url/api/devis-$type/update-status/${widget.id}');
+    final response = await http.put(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode({
+        'status': true,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonResponse = jsonDecode(response.body);
+      // Handle successful status update if needed
+    } else {
+      throw Exception('Failed to change payment status');
+    }
+  }
 }

@@ -336,9 +336,9 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                             ElevatedButton(
                               onPressed: ()async {
 
-                                await Navigator.push(context ,MaterialPageRoute(
+                                await /*Navigator.push(context ,MaterialPageRoute(
                                     builder: (context) =>
-                                        PaymentSheetDefferedScreen()));
+                                        StripePayment()));*/
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(

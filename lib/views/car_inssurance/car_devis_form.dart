@@ -185,6 +185,7 @@ class _DevisFormState extends State<DevisForm> {
                         loading = !loading;
                       });
                       final carDevis = CarDevis(
+                        id: 0,
                         offer_id: widget.idoffre,
                         type_id: widget.idtype,
                         userid: userProvider!.uid,
@@ -205,6 +206,7 @@ class _DevisFormState extends State<DevisForm> {
                         permis: _permisController.text,
                         historiqueDesSinistres:
                             _historiqueDesSinistresController.text,
+                        status: false
                       );
                       print(carDevis.toJson());
                       bool sent = await submitCarDevis(carDevis, context);
