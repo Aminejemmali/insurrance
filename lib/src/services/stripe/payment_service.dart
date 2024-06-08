@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/http.dart' as http;
 import 'package:insurrance/api.dart';
+import 'package:insurrance/src/services/Notifications/notification_services.dart';
 import 'package:insurrance/views/devis/devis_list.dart';
 import 'package:lottie/lottie.dart';
 
@@ -104,6 +105,9 @@ class _StripePaymentState extends State<StripePayment> {
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Payment completed!')));
 
+      // show Notification For Success Payment
+      showPaymentSuccessNotification();
+
       // Delay for 5 seconds before navigating
       Future.delayed(Duration(seconds: 5), () {
         Navigator.pushReplacement(
@@ -125,8 +129,10 @@ class _StripePaymentState extends State<StripePayment> {
   void handlePaymentError(Object e) {
     if (e is StripeException) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error from Stripe: ${e.error.localizedMessage}')));
+      showPaymentFailureNotification();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Unforeseen error: ${e.toString()}')));
+      showPaymentFailureNotification();
     }
   }
 
@@ -170,5 +176,20 @@ class _StripePaymentState extends State<StripePayment> {
     } else {
       throw Exception('Failed to change payment status');
     }
+  }
+
+  Future<void> showPaymentSuccessNotification() async {
+    await NotificationService().showNotification(
+      widget.id,
+      'Payment Success',
+      'Payment For Inssurance  ${widget.type} With  Amount ${widget.amount}  EUR.',
+    );
+  }
+  Future<void> showPaymentFailureNotification() async {
+    await NotificationService().showNotification(
+      widget.id,
+      'Payment Failed',
+      'Payment For Inssurance  ${widget.type} With  Amount ${widget.amount}  EUR.',
+    );
   }
 }

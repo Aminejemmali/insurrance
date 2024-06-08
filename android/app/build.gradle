@@ -33,6 +33,7 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true  // Enable core library desugaring
     }
 
     kotlinOptions {
@@ -42,6 +43,8 @@ android {
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
     }
+
+
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
@@ -68,4 +71,10 @@ flutter {
     source '../..'
 }
 
-dependencies {implementation 'com.android.support:multidex:1.0.3'}
+dependencies {
+         implementation 'com.android.support:multidex:1.0.3'
+
+        implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+        // other dependencies
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.3'  // Add desugaring library
+    }

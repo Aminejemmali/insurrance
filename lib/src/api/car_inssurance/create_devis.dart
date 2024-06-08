@@ -4,6 +4,7 @@ import 'package:insurrance/api.dart';
 import 'dart:convert';
 import 'package:insurrance/src/model/car_devis.dart';
 import 'package:insurrance/views/car_inssurance/check_done.dart';
+import 'package:insurrance/views/devis/devis_list.dart';
 import 'package:insurrance/views/home/index_home.dart';
 Future<bool> submitCarDevis(CarDevis carDevis , BuildContext context) async {
   final url = Uri.parse('$base_url/api/autos/create-devis');
@@ -31,7 +32,7 @@ Future<bool> submitCarDevis(CarDevis carDevis , BuildContext context) async {
             onPressed: () {
               Navigator.of(context).pop(); // Dismiss the alert dialog
               Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) => AppointmentBookedPage(
+                                      builder: (context) => DevisList(
                                             
                                           )));
             },

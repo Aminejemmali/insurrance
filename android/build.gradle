@@ -1,5 +1,19 @@
-allprojects {
+buildscript {
     ext.kotlin_version = '2.0.0'
+    ext {
+        androidDesugarVersion = "2.0.3"
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.0.4'
+        // other dependencies
+    }
+}
+
+allprojects {
     repositories {
         google()
         mavenCentral()

@@ -9,6 +9,7 @@ import 'package:insurrance/src/controllers/general_controller.dart';
 import 'package:insurrance/src/controllers/login_controller.dart';
 import 'package:insurrance/src/controllers/signup_controller.dart';
 import 'package:insurrance/src/providers/user_provideer.dart';
+import 'package:insurrance/src/services/Notifications/notification_services.dart';
 import 'package:insurrance/views/home/index_home.dart';
 import 'package:insurrance/wrapper.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  await NotificationService().init();
   runApp(const MyApp());
 }
 

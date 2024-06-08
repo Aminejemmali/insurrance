@@ -150,7 +150,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      // Navigate to forgot password screen
+
                                     },
                                     child: const Text(
                                       "Forgot Password",

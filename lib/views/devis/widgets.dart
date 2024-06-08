@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:insurrance/src/model/car_devis.dart';
 import 'package:insurrance/src/model/habitation_devis.dart';
-import 'package:insurrance/src/services/authentication/stripe/payment_service.dart';
+import 'package:insurrance/src/services/stripe/payment_service.dart';
 
 Widget buildHabitationDevisCard(HabitationDevis devis , BuildContext context) {
   return Card(

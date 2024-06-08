@@ -8,7 +8,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:insurrance/src/api/car_inssurance/create_devis.dart';
 import 'package:insurrance/src/providers/user_provideer.dart';
-import 'package:insurrance/src/services/authentication/stripe/payment_service.dart';
+import 'package:insurrance/src/services/stripe/payment_service.dart';
 import 'package:intl/intl.dart';
 import 'package:insurrance/src/model/car_devis.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -186,7 +186,7 @@ class _DevisFormState extends State<DevisForm> {
                       });
                       final carDevis = CarDevis(
                         id: 0,
-                        offer_id: widget.idoffre,
+                        offer_id: widget.idoffre ?? 0 ,
                         type_id: widget.idtype,
                         userid: userProvider!.uid,
                         nom: userProvider!.firstName,
