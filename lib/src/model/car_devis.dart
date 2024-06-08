@@ -1,4 +1,5 @@
 class CarDevis {
+  final int id;
   final String nom;
   final String tarif;
   final String prenom;
@@ -18,8 +19,10 @@ class CarDevis {
   final String userid;
   final int type_id;
   final int offer_id;
+  final bool status;
 
   CarDevis({
+    required this.id,
     required this.nom,
     required this.tarif,
     required this.prenom,
@@ -39,10 +42,12 @@ class CarDevis {
     required this.userid,
     required this.offer_id,
     required this.type_id,
+    required this.status
   });
 
   factory CarDevis.fromJson(Map<String, dynamic> json) {
     return CarDevis(
+      id: json['id'],
       nom: json['nom'] ?? '',
       tarif: json['tarif'] ?? '',
       prenom: json['prenom'] ?? '',
@@ -61,12 +66,14 @@ class CarDevis {
       historiqueDesSinistres: json['Historique_des_sinistres'] ?? '',
       userid: json['client_id'] ?? '',
       offer_id: json['offre_id'] ?? 0,
-      type_id: json ['type_id'] ?? 0
+      type_id: json ['type_id'] ?? 0,
+        status: json ['status'] ?? false
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id' : id,
       'nom': nom,
       'tarif': tarif,
       'prenom': prenom,
@@ -85,7 +92,8 @@ class CarDevis {
       'Historique_des_sinistres': historiqueDesSinistres,
       'offre_id':  offer_id,
       'type_id': type_id,
-      'client_id':userid
+      'client_id':userid,
+      'status' :status
     };
   }
 }

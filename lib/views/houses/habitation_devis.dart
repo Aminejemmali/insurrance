@@ -123,6 +123,7 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
                         });
 
                         final habitationDevis = HabitationDevis(
+                          id: 0,
                           typeLogement: _typeLogementController.text,
                           adresseLogement: _adresseLogementController.text,
                           dateConstruction: _dateConstructionController.text,
@@ -139,6 +140,7 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
                           adresse: currentUser.address ?? " ",
                           codePostale: currentUser.postalCode ?? " ",
                           numTel: currentUser.phoneNumber ?? " ",
+                          status: false
                         );
 
                         print(habitationDevis.toJson());

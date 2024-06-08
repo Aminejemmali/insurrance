@@ -47,10 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.fromLTRB(0, 12, 0, 20),
                 child: HomeBannerSliderWidget(),
               ),
-              SearchFilterWidget(
-                onSearchTap: () {},
-                controller: TextEditingController(),
-              ),
+
               SizedBox(height: 30),
               Text( 'hi ${userProvider.user!.firstName}'+
                 ",  Explore Our Insurance Plans",
