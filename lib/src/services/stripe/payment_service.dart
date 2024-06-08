@@ -128,10 +128,10 @@ class _StripePaymentState extends State<StripePayment> {
 
   void handlePaymentError(Object e) {
     if (e is StripeException) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error from Stripe: ${e.error.localizedMessage}')));
+      showErrorDialog(context, 'Error from Stripe', e.error.localizedMessage!);
       showPaymentFailureNotification();
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Unforeseen error: ${e.toString()}')));
+      showErrorDialog(context, 'Unforeseen error', e.toString());
       showPaymentFailureNotification();
     }
   }
@@ -185,11 +185,28 @@ class _StripePaymentState extends State<StripePayment> {
       'Payment For Inssurance  ${widget.type} With  Amount ${widget.amount}  EUR.',
     );
   }
+
   Future<void> showPaymentFailureNotification() async {
     await NotificationService().showNotification(
       widget.id,
       'Payment Failed',
       'Payment For Inssurance  ${widget.type} With  Amount ${widget.amount}  EUR.',
+    );
+  }
+
+  void showErrorDialog(BuildContext context, String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK'),
+          ),
+        ],
+      ),
     );
   }
 }
