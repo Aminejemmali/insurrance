@@ -1,4 +1,5 @@
 class HabitationDevis {
+  final int id;
   final String tarif;
   final String nom;
   final String prenom;
@@ -16,8 +17,10 @@ class HabitationDevis {
   //final int offreId;
   final int typeId;
   final String clientId;
+  final bool status;
 
   HabitationDevis({
+    required this.id,
     required this.tarif,
     required this.nom,
     required this.prenom,
@@ -35,10 +38,12 @@ class HabitationDevis {
     // required this.offreId,
     required this.typeId,
     required this.clientId,
+    required this.status
   });
 
   factory HabitationDevis.fromJson(Map<String, dynamic> json) {
     return HabitationDevis(
+      id: json['id'],
       tarif: json['tarif'],
       nom: json['nom'],
       prenom: json['prenom'],
@@ -56,11 +61,13 @@ class HabitationDevis {
       // offreId: json['offre_id'],
       typeId: json['type_id'],
       clientId: json['client_id'],
+      status: json['status']
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id' : id,
       'tarif': tarif,
       'nom': nom,
       'prenom': prenom,
@@ -78,6 +85,7 @@ class HabitationDevis {
       //'offre_id': offreId,
       'type_id': typeId,
       'client_id': clientId,
+      'status' :status
     };
   }
 }

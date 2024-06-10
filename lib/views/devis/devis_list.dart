@@ -75,13 +75,13 @@ class _DevisListState extends State<DevisList> {
                 ListView.builder(
                   itemCount: habitationDevisList.length,
                   itemBuilder: (context, index) {
-                    return buildHabitationDevisCard(habitationDevisList[index]);
+                    return buildHabitationDevisCard(habitationDevisList[index] , context);
                   },
                 ),
                 ListView.builder(
                   itemCount: carDevisList.length,
                   itemBuilder: (context, index) {
-                    return buildCarDevisCard(carDevisList[index]);
+                    return buildCarDevisCard(carDevisList[index],context);
                   },
                 ),
               ],

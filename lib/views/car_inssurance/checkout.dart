@@ -9,7 +9,7 @@ import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/model/car_plan.dart';
 import 'package:insurrance/src/model/habitation.dart';
 import 'package:insurrance/src/model/offer.dart';
-import 'package:insurrance/src/services/authentication/stripe/payment_service.dart';
+import 'package:insurrance/src/services/stripe/payment_service.dart';
 import 'package:insurrance/views/car_inssurance/car_devis_form.dart';
 
 
@@ -336,16 +336,16 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                             ElevatedButton(
                               onPressed: ()async {
 
-                                await Navigator.push(context ,MaterialPageRoute(
+                                await /*Navigator.push(context ,MaterialPageRoute(
                                     builder: (context) =>
-                                        PaymentSheetDefferedScreen()));
+                                        StripePayment()));*/
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => DevisForm(
                                             tarif: total.toInt(),
                                             idtype: widget.carInsurancePlan.id,
-                                            idoffre: widget.offer!.id,
+                                            idoffre: widget.offer!.id ?? 0 ,
                                           )),
                                 );
 
