@@ -151,16 +151,12 @@ class _SignInScreenState extends State<SignInScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-<<<<<<< HEAD
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 ForgotPasswordScreen()),
                                       );
-=======
-
->>>>>>> d01cdc7cf24694f3fa172a197cc4b39faaab3839
                                     },
                                     child: const Text(
                                       "Forgot Password",
