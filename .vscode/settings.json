@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
+        "appbar",
         "cupertino",
         "Devis",
         "insurrance",
         "Signup"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

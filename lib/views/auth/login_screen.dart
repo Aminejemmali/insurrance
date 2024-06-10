@@ -6,6 +6,7 @@ import 'package:insurrance/src/controllers/login_controller.dart';
 import 'package:insurrance/src/services/authentication/auth_firebase.dart';
 import 'package:insurrance/src/widgets/auth_form_field.dart';
 import 'package:insurrance/src/widgets/button_widget.dart';
+import 'package:insurrance/views/auth/forget_password.dart';
 import 'package:insurrance/views/home/index_home.dart';
 
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -150,7 +151,12 @@ class _SignInScreenState extends State<SignInScreen> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      // Navigate to forgot password screen
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ForgotPasswordScreen()),
+                                      );
                                     },
                                     child: const Text(
                                       "Forgot Password",
