@@ -3,6 +3,7 @@ import 'package:insurrance/api.dart';
 import 'dart:convert';
 import 'package:insurrance/src/model/habitation_devis.dart';
 import 'package:flutter/material.dart';
+import 'package:insurrance/views/devis/devis_list.dart';
 import 'package:insurrance/views/home/index_home.dart';
 
 Future<bool> submitHabitationDevis(HabitationDevis habitationDevis ,BuildContext context) async {
@@ -31,7 +32,7 @@ Future<bool> submitHabitationDevis(HabitationDevis habitationDevis ,BuildContext
                 onPressed: () {
                   Navigator.of(context).pop(); // Dismiss the alert dialog
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => HomeScreen(
+                      builder: (context) => DevisList(
 
                       )));
                 },

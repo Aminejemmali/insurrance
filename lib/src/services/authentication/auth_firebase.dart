@@ -9,9 +9,17 @@ class AuthResult {
   AuthResult({required this.user, this.errorMessage});
 }
 
+class FirebaseAuthResult {
+  final User? user;
+  final String? errorMessage;
+
+  FirebaseAuthResult({this.user, this.errorMessage});
+}
+
 class UserAuth {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String errorMessage = "Authentication failed";
+
   Future<AuthResult> signInWithEmailAndPassword(
       BuildContext context, String email, String password) async {
     try {
@@ -24,13 +32,11 @@ class UserAuth {
       if (e is FirebaseAuthException) {
         errorMessage = getErrorMessage(e.code);
       }
-      // print('Error signing in: $e');
-      // _showErrorSnackbar(context, 'Sign in failed: $e');
       return AuthResult(user: null, errorMessage: errorMessage);
     }
   }
 
-  Future<AuthResult> signUpWithEmailAndPassword(
+  Future<FirebaseAuthResult> signUpWithEmailAndPassword(
       BuildContext context, String email, String password) async {
     try {
       UserCredential userCredential =
@@ -38,14 +44,11 @@ class UserAuth {
         email: email,
         password: password,
       );
-      return AuthResult(user: userCredential.user, errorMessage: null);
+      return FirebaseAuthResult(user: userCredential.user);
+    } on FirebaseAuthException catch (e) {
+      return FirebaseAuthResult(errorMessage: e.message);
     } catch (e) {
-      if (e is FirebaseAuthException) {
-        errorMessage = getErrorMessage(e.code);
-      }
-      // print('Error signing up: $e');
-      // _showErrorSnackbar(context, 'Sign up failed: $e');
-      return AuthResult(user: null, errorMessage: errorMessage);
+      return FirebaseAuthResult(errorMessage: e.toString());
     }
   }
 
@@ -59,7 +62,6 @@ class UserAuth {
           actions: <Widget>[
             TextButton(
               onPressed: () async {
-                // Navigator.of(context).pop();
                 try {
                   await _auth.signOut();
                   Navigator.pushReplacement(
@@ -67,7 +69,6 @@ class UserAuth {
                     MaterialPageRoute(builder: (context) => MainAuth()),
                   );
                 } catch (e) {
-                  //print('Error signing out: $e');
                   _showErrorSnackbar(context, 'Sign out failed: $e');
                 }
               },

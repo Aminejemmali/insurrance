@@ -213,9 +213,7 @@ class _DevisFormState extends State<DevisForm> {
                       setState(() {
                         loading = !loading;
                       });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Devis Created Successfully')),
-                      );
+                    
 
                      
           

@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:insurrance/src/api/user/signup.dart';
 import 'package:insurrance/src/config/app_colors.dart';
 import 'package:insurrance/src/config/app_text_style.dart';
@@ -8,6 +8,7 @@ import 'package:insurrance/src/services/authentication/auth_firebase.dart';
 import 'package:insurrance/src/widgets/auth_form_field.dart';
 import 'package:insurrance/src/widgets/button_widget.dart';
 import 'package:insurrance/util/pickdate.dart';
+import 'package:insurrance/views/auth/login_screen.dart';
 import 'package:insurrance/views/home/index_home.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
@@ -25,14 +26,14 @@ class _SignupScreenState extends State<SignupScreen> {
   bool obscurePassword = true;
   bool obscureConfirmPassword = true;
   bool loading = false;
-  final GlobalKey<FormState> _signUpFromKey = GlobalKey();
+  final GlobalKey<FormState> _signUpFormKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     String errorMessage = "";
-    DateTime _pickedDate;
     return Consumer<SignUpController>(
-        builder: (context, signUpController, child) {
-      return ModalProgressHUD(
+      builder: (context, signUpController, child) {
+        return ModalProgressHUD(
           progressIndicator: const CircularProgressIndicator(
             color: AppColors.primaryColor,
           ),
@@ -43,7 +44,7 @@ class _SignupScreenState extends State<SignupScreen> {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(18, 58, 18, 0),
                 child: Form(
-                  key: _signUpFromKey,
+                  key: _signUpFormKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -103,7 +104,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           if ((value ?? "").isEmpty) {
                             return 'Field Required';
                           } else {
-                            if (!value!.contains('@') && !value.contains('.')) {
+                            if (!(value?.contains('@') ?? false) || !(value?.contains('.') ?? false)) {
                               return 'Please make sure your email address is valid';
                             }
                           }
@@ -122,10 +123,10 @@ class _SignupScreenState extends State<SignupScreen> {
                           signUpController.update();
                         },
                         validator: (value) {
-                          if (value!.isEmpty) {
+                          if ((value ?? "").isEmpty) {
                             return "Field Required";
-                          } else if (value.length < 8) {
-                            return 'Password must contains 8 digit';
+                          } else if ((value?.length ?? 0) < 8) {
+                            return 'Password must contain at least 8 characters';
                           }
                           return null;
                         },
@@ -243,7 +244,6 @@ class _SignupScreenState extends State<SignupScreen> {
                         buttonText: 'Signup',
                         buttonTextStyle: AppTextStyles.buttonTextStyle1,
                         onTap: () async {
-                          ///---keyboard-close
                           FocusScopeNode currentFocus = FocusScope.of(context);
                           if (!currentFocus.hasPrimaryFocus) {
                             currentFocus.unfocus();
@@ -251,57 +251,72 @@ class _SignupScreenState extends State<SignupScreen> {
                           setState(() {
                             loading = !loading;
                           });
-                          if (_signUpFromKey.currentState!.validate()) {
-                            // User data
-
-                            AuthResult authResult = await UserAuth()
-                                .signUpWithEmailAndPassword(
-                                    context,
-                                    signUpController.signUpEmailController.text,
-                                    signUpController
-                                        .signUpPasswordController.text);
-                            if (authResult.user != null) {
-                              final Map<String, dynamic> userData = {
-                                "id": FirebaseAuth.instance.currentUser!.uid,
-                                "nom": signUpController
-                                    .signUpFirstNameController.text,
-                                "prenom": signUpController
-                                    .signUpLastNameController.text,
-                                "email":
-                                    FirebaseAuth.instance.currentUser!.email,
-                                "password": signUpController
-                                    .signUpPasswordController.text,
-                                "date_naissance":
-                                    signUpController.birthDate.text,
-                                "adresse": signUpController.address.text,
-                                "code_postale":
-                                    signUpController.codePostal.text,
-                                "num_tel": signUpController.phoneNumber.text
-                              };
-                              String dataAdded = await signUpUser(userData);
-                              setState(() {
-                                errorMessage = dataAdded;
-                              });
-                              if (dataAdded == "success") {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => HomeScreen()),
-                                );
+                          if (_signUpFormKey.currentState!.validate()) {
+                            try {
+                              FirebaseAuthResult authResult = await UserAuth()
+                                  .signUpWithEmailAndPassword(
+                                      context,
+                                      signUpController
+                                          .signUpEmailController.text,
+                                      signUpController
+                                          .signUpPasswordController.text);
+                              if (authResult.user != null) {
+                                final Map<String, dynamic> userData = {
+                                  "id":
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  "nom": signUpController
+                                      .signUpFirstNameController.text,
+                                  "prenom": signUpController
+                                      .signUpLastNameController.text,
+                                  "email": FirebaseAuth
+                                      .instance.currentUser!.email,
+                                  "password": signUpController
+                                      .signUpPasswordController.text,
+                                  "date_naissance":
+                                      signUpController.birthDate.text,
+                                  "adresse": signUpController.address.text,
+                                  "code_postale":
+                                      signUpController.codePostal.text,
+                                  "num_tel":
+                                      signUpController.phoneNumber.text
+                                };
+                                String dataAdded =
+                                    await signUpUser(userData);
+                                setState(() {
+                                  errorMessage = dataAdded;
+                                });
+                                if (dataAdded == "success") {
+                                 
+                          widget.controller.animateToPage(1,
+                              duration: const Duration(milliseconds: 500),
+                              curve: Curves.ease);
+                        
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text(errorMessage)));
+                                }
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text(errorMessage)));
+                                    SnackBar(
+                                        content: Text(authResult.errorMessage ??
+                                            'An unexpected error occurred.')));
                               }
-                            } else {
+                            } catch (e) {
+                              setState(() {
+                                errorMessage = e.toString();
+                              });
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(authResult.errorMessage ??
-                                          'An unexpected error occurred.')));
+                                  SnackBar(content: Text(errorMessage)));
+                            } finally {
+                              setState(() {
+                                loading = !loading;
+                              });
                             }
+                          } else {
+                            setState(() {
+                              loading = !loading;
+                            });
                           }
-                          setState(() {
-                            loading = !loading;
-                          });
                         },
                       ),
                       const SizedBox(height: 28),
@@ -311,7 +326,8 @@ class _SignupScreenState extends State<SignupScreen> {
                               duration: const Duration(milliseconds: 500),
                               curve: Curves.ease);
                         },
-                        child: const Text("Have already account please sign in",
+                        child: const Text(
+                            "Have already account please sign in",
                             style: AppTextStyles.underlineTextStyle1),
                       ),
                       const SizedBox(height: 18),
@@ -320,7 +336,9 @@ class _SignupScreenState extends State<SignupScreen> {
                 ),
               ),
             ),
-          ));
-    });
+          ),
+        );
+      },
+    );
   }
 }

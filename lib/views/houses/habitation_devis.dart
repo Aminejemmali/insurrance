@@ -152,9 +152,7 @@ class _HabitationDevisFormState extends State<HabitationDevisForm> {
                           loading = false;
                         });
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Devis Created Successfully')),
-                        );
+                       
                       }
                     },
                     child: loading
