@@ -32,9 +32,8 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     _firstNameController.text = widget.userModel.firstName;
     _lastNameController.text = widget.userModel.lastName;
     _postalCodeController.text = widget.userModel.postalCode ?? "";
-
     _addressLine1Controller.text = widget.userModel.address ?? '';
-    _phoneNumberController.text = widget.userModel.postalCode ?? '';
+    _phoneNumberController.text = widget.userModel.phoneNumber ?? '';
   }
 
   @override
